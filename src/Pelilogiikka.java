@@ -30,13 +30,19 @@ public class Pelilogiikka extends JPanel implements KeyListener, ActionListener{
 	}
 	
 	// KESKENERƒINEN!! Keksik‰‰ lis‰‰ logiikkaa palikoille ja luokaa uusia metodeja.
-	public void liikutaPalikkaa() {
+	// 1 - sininen
+	// 2 - punainen
+	public void liikutaPalikkaa(Graphics g) {
 		for(int i=rivi-1; i>=0; i--) {
 			for(int j=sarake-1; j>=0; j--) {
-				if(pelilauta.lauta2D[i][j] == 1) {
-					System.out.println(j);
+				int koordinaattiArvo = pelilauta.lauta2D[i][j];
+				//System.out.println(koordinaattiArvo);
+				if(koordinaattiArvo != 0) {
+					//System.out.println("(" + i + "," + j + ")");
 					pelilauta.lauta2D[i][j] = 0;
-					pelilauta.lauta2D[i+1][j] = 1;
+					pelilauta.lauta2D[i+1][j] = koordinaattiArvo;
+					pelilauta.luoPalikkaGrafiikat((Graphics2D)g, i, j, koordinaattiArvo);
+					
 				}
 			}
 		}
@@ -44,9 +50,11 @@ public class Pelilogiikka extends JPanel implements KeyListener, ActionListener{
 	
 	// T‰ss‰ metodissa p‰‰tet‰‰n palikan muoto ja v‰ri.
 	public void luoPalikka(Graphics g) {
-		int[][] pArray = {{1,1,1 },{1, 1,1}};
+		int arvo = 2;
+		int[][] pArray = {{arvo,arvo},{arvo,arvo}};
 		
-		Palikat palikka = new Palikat(pArray, Color.blue, pelilauta, (Graphics2D)g);
+		
+		Palikat currentPalikka = new Palikat(pArray, arvo, pelilauta, (Graphics2D)g);
 	}
 	
 	/**
@@ -60,6 +68,7 @@ public class Pelilogiikka extends JPanel implements KeyListener, ActionListener{
 		g.fillRect(1, 1, 692, 592);
 		pelilauta.luoLauta((Graphics2D)g);
 		luoPalikka(g);
+		liikutaPalikkaa(g);
 	}
 	
 	
@@ -67,7 +76,6 @@ public class Pelilogiikka extends JPanel implements KeyListener, ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		timer.start();
-		//liikutaPalikkaa();
 		repaint();
 	}
 

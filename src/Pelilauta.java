@@ -1,5 +1,6 @@
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 
 public class Pelilauta {
@@ -10,12 +11,7 @@ public class Pelilauta {
 		lauta2D = new int[rivi][sarake];
 		for(int i=0; i< lauta2D.length; i++) {
 			for(int j=0; j< lauta2D[0].length; j++) {
-				if(i==1 && j==5) {
-					lauta2D[i][j] = 1;
-				} else {
-					lauta2D[i][j] = 0;
-				}
-				
+					lauta2D[i][j] = 0;	
 			}
 		}
 		
@@ -29,14 +25,9 @@ public class Pelilauta {
 	public void luoLauta(Graphics2D g) {
 		for(int i=0; i< lauta2D.length; i++) {
 			for(int j=0; j< lauta2D[0].length; j++) {
-				if(lauta2D[i][j] == 0) {
-					g.setColor(Color.white);
-					g.fillRect(j * nelionPituus, i * nelionPituus, nelionPituus, nelionPituus);
-				}else {
-					g.setColor(Color.yellow);
-					g.fillRect(j * nelionPituus, i * nelionPituus, nelionPituus, nelionPituus);
-				}
 
+				g.setColor(Color.white);
+				g.fillRect(j * nelionPituus, i * nelionPituus, nelionPituus, nelionPituus);
 				
 				g.setStroke(new BasicStroke(3));
 				g.setColor(Color.black);
@@ -46,20 +37,25 @@ public class Pelilauta {
 	}
 	
 	// Palikan grafiikoiden luonti.
-	public void luoPalikka(Graphics2D g, int xKoordinaatti, int yKoordinaatti, Color color) {
+	public void luoPalikkaGrafiikat(Graphics2D g, int xKoordinaatti, int yKoordinaatti, int arvo) {
 		
-		for(int i=0; i< lauta2D.length; i++) {
-			for(int j=0; j< lauta2D[0].length; j++) {
-				
-				if(i==xKoordinaatti && j==yKoordinaatti) {
-					g.setColor(color);
-					g.fillRect(j * nelionPituus, i * nelionPituus, nelionPituus, nelionPituus);
-					g.setStroke(new BasicStroke(3));
-					g.setColor(Color.black);
-					g.drawRect(j * nelionPituus, i * nelionPituus, nelionPituus, nelionPituus);
-				}
-			}
+
+			lauta2D[xKoordinaatti][yKoordinaatti] = arvo;
+			switch(arvo) {
+			case 1:
+				g.setColor(Color.blue);
+				g.fillRect(yKoordinaatti * nelionPituus, xKoordinaatti * nelionPituus, nelionPituus, nelionPituus);
+				break;
+			case 2:
+				g.setColor(Color.red);
+				g.fillRect(yKoordinaatti * nelionPituus, xKoordinaatti * nelionPituus, nelionPituus, nelionPituus);
+				break;
 		}
-			
+			g.setStroke(new BasicStroke(3));
+			g.setColor(Color.black);
+			g.drawRect(yKoordinaatti * nelionPituus, xKoordinaatti * nelionPituus, nelionPituus, nelionPituus);
+	
+	
 	}
+
 }
