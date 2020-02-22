@@ -4,7 +4,7 @@ import java.awt.Graphics2D;
 public class Palikat {
 	
 	// Palikan konstruktori. Antaa "rakennusohjeet" pelilaudalle.
-	public Palikat(int[][] koordinaatit, int arvo, Pelilauta pelilauta, Graphics2D g) {
+	public Palikat(int[][] koordinaatit, int arvo, Pelilauta pelilauta) {
 
 		int uusiX = 0;
 		int uusiY = 0;
@@ -15,7 +15,7 @@ public class Palikat {
 					uusiX = i;
 					uusiY = j+3;
 				}
-				pelilauta.luoPalikkaGrafiikat(g, uusiX, uusiY, arvo);
+				pelilauta.luoPalikkaGrafiikat(uusiX, uusiY, arvo);
 			}
 		}
 	}

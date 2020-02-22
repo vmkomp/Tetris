@@ -1,0 +1,233 @@
+JvmtiExport can_access_local_variables 0
+JvmtiExport can_hotswap_or_post_breakpoint 0
+JvmtiExport can_post_on_exceptions 0
+# 129 ciObject found
+ciMethod java/lang/Object <init> ()V 4097 1 46574 0 0
+ciMethod java/lang/Object equals (Ljava/lang/Object;)Z 2073 1 2955 0 -1
+ciMethod java/lang/String equals (Ljava/lang/Object;)Z 2049 11161 2430 0 -1
+ciMethod java/lang/Integer intValue ()I 1057 1 132 0 -1
+ciMethod java/lang/Integer equals (Ljava/lang/Object;)Z 1297 1 162 0 0
+ciMethod java/util/HashMap putVal (ILjava/lang/Object;Ljava/lang/Object;ZZ)Ljava/lang/Object; 2145 129 5417 0 -1
+ciMethod java/util/HashMap resize ()[Ljava/util/HashMap$Node; 321 1753 300 0 0
+ciMethod java/util/HashMap treeifyBin ([Ljava/util/HashMap$Node;I)V 0 0 1 0 -1
+ciMethod java/util/HashMap newNode (ILjava/lang/Object;Ljava/lang/Object;Ljava/util/HashMap$Node;)Ljava/util/HashMap$Node; 3617 1 3902 0 0
+ciMethod java/util/HashMap afterNodeAccess (Ljava/util/HashMap$Node;)V 2673 1 1370 0 0
+ciMethod java/util/HashMap afterNodeInsertion (Z)V 3617 1 1535 0 0
+ciMethod java/util/HashMap$Node <init> (ILjava/lang/Object;Ljava/lang/Object;Ljava/util/HashMap$Node;)V 2553 1 3933 0 0
+ciMethodData java/lang/Object <init> ()V 2 46574 orig 264 104 163 91 85 0 0 0 0 104 4 3 23 0 0 0 0 32 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 77 68 79 32 101 120 116 114 97 32 100 97 116 97 32 108 111 99 107 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 0 0 113 159 5 0 1 0 0 0 0 0 0 0 0 0 0 0 2 0 0 0 0 0 3 0 1 0 0 0 0 0 0 0 255 255 255 255 0 0 0 0 0 0 0 0 data 0 oops 0
+ciMethod java/util/HashMap$TreeNode putTreeVal (Ljava/util/HashMap;[Ljava/util/HashMap$Node;ILjava/lang/Object;Ljava/lang/Object;)Ljava/util/HashMap$TreeNode; 0 0 1 0 -1
+ciMethod java/util/HashMap$TreeNode split (Ljava/util/HashMap;[Ljava/util/HashMap$Node;II)V 0 0 1 0 -1
+ciMethodData java/util/HashMap putVal (ILjava/lang/Object;Ljava/lang/Object;ZZ)Ljava/lang/Object; 2 5417 orig 264 104 163 91 85 0 0 0 0 144 33 17 23 0 0 0 0 176 6 0 0 224 4 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 77 68 79 32 101 120 116 114 97 32 100 97 116 97 32 108 111 99 107 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 9 1 0 0 233 160 0 0 1 6 0 0 0 0 0 0 0 0 0 0 2 0 0 0 1 0 50 0 2 0 0 0 64 5 0 0 255 255 255 255 7 0 7 0 0 0 0 0 data 168 0x70007 0xcb 0x40 0x1352 0x100007 0x1352 0x50 0x0 0x140005 0x0 0x19409e80 0xca 0x1940a7b0 0x1 0x2c0007 0x8f4 0x98 0xb29 0x380005 0x1 0x19409e80 0xacf 0x1940a7b0 0x59 0x3b0004 0x0 0x1940a860 0xb28 0x1940a910 0x1 0x3c0003 0xb29 0x3d0 0x450007 0x37f 0xc8 0x575 0x510007 0x402 0x90 0x173 0x550007 0x0 0x88 0x173 0x5b0005 0x0 0x2cba480 0x171 0x179be720 0x2 0x5e0007 0x0 0x38 0x173 0x650003 0x575 0x278 0x6a0004 0xfffffffffffffc81 0x1940a860 0x15 0x0 0x0 0x6d0007 0x37f 0x98 0x0 0x720004 0x0 0x0 0x0 0x0 0x0 0x7b0005 0x0 0x0 0x0 0x0 0x0 0x800003 0x0 0x1b0 0x8e0007 0x111 0xb8 0x32e 0x980005 0x0 0x19409e80 0x301 0x1940a7b0 0x2d 0xa20007 0x32e 0x148 0x0 0xa90005 0x0 0x0 0x0 0x0 0x0 0xac0003 0x0 0xf8 0xb50007 0xc0 0xc8 0x51 0xc10007 0x6 0xc0 0x4b 0xc50007 0x0 0x88 0x4b 0xcb0005 0x0 0x179be720 0x3 0x2cba480 0x48 0xce0007 0x0 0x38 0x4b 0xd10003 0x4b 0x30 0xdb0003 0xc0 0xfffffffffffffe80 0xe00007 0x32e 0x90 0x5c6 0xec0007 0x5c6 0x40 0x0 0xf10007 0x0 0x20 0x0 0xfd0005 0x0 0x19409e80 0x5c6 0x0 0x0 0x11c0007 0xe1d 0x50 0x3a 0x1200005 0x2 0x19409e80 0x34 0x1940a7b0 0x4 0x1270005 0x1 0x19409e80 0xdd0 0x1940a7b0 0x86 oops 18 10 java/util/HashMap 12 javax/swing/UIDefaults$TextAndMnemonicHashMap 20 java/util/HashMap 22 javax/swing/UIDefaults$TextAndMnemonicHashMap 26 java/util/HashMap$Node 28 java/util/LinkedHashMap$Entry 47 java/lang/String 49 java/lang/Integer 60 java/util/HashMap$Node 89 java/util/HashMap 91 javax/swing/UIDefaults$TextAndMnemonicHashMap 120 java/lang/Integer 122 java/lang/String 148 java/util/HashMap 158 java/util/HashMap 160 javax/swing/UIDefaults$TextAndMnemonicHashMap 164 java/util/HashMap 166 javax/swing/UIDefaults$TextAndMnemonicHashMap
+ciMethodData java/util/HashMap resize ()[Ljava/util/HashMap$Node; 2 3335 orig 264 104 163 91 85 0 0 0 0 136 35 17 23 0 0 0 0 56 6 0 0 176 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 77 68 79 32 101 120 116 114 97 32 100 97 116 97 32 108 111 99 107 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 219 0 0 0 33 8 0 0 97 97 0 0 0 0 0 0 0 0 0 0 2 0 0 0 2 0 56 0 2 0 0 0 240 4 0 0 255 255 255 255 7 0 6 0 0 0 0 0 data 158 0x60007 0x39 0x38 0xcb 0xa0003 0xcb 0x18 0x190007 0xcb 0x98 0x39 0x1f0007 0x39 0x20 0x0 0x320007 0x0 0x90 0x39 0x380007 0x6 0x70 0x33 0x400003 0x33 0x50 0x440007 0x3a 0x38 0x91 0x4a0003 0x91 0x18 0x570007 0x6d 0x78 0x97 0x680007 0x0 0x58 0x97 0x700007 0x0 0x38 0x97 0x760003 0x97 0x18 0x880004 0x0 0x1940cfb0 0xee 0x0 0x0 0x940007 0xcb 0x340 0x39 0x9d0007 0x39 0x320 0x9a0 0xa70007 0x445 0x2e8 0x55b 0xae0104 0x0 0x0 0x0 0x0 0x0 0xb40007 0x1b0 0x68 0x3ab 0xc50004 0x0 0x1940a860 0x3ab 0x0 0x0 0xc60003 0x3ab 0x248 0xcb0004 0xfffffffffffffe50 0x1940a860 0x139 0x0 0x0 0xce0007 0x1b0 0x98 0x0 0xd30004 0x0 0x0 0x0 0x0 0x0 0xdc0005 0x0 0x0 0x0 0x0 0x0 0xdf0003 0x0 0x180 0xfc0007 0x1e8 0x70 0x1dd 0x1010007 0x86 0x38 0x157 0x1080003 0x157 0x18 0x1160003 0x1dd 0x50 0x11b0007 0x9a 0x38 0x14e 0x1220003 0x14e 0x18 0x1350007 0x215 0xffffffffffffff58 0x1b0 0x13a0007 0x59 0x50 0x157 0x1490004 0x0 0x1940a860 0x157 0x0 0x0 0x14c0007 0x62 0x50 0x14e 0x15d0004 0x0 0x1940a860 0x14e 0x0 0x0 0x1610003 0x9a0 0xfffffffffffffcf8 oops 5 50 [Ljava/util/HashMap$Node; 78 java/util/HashMap$Node 87 java/util/HashMap$Node 141 java/util/HashMap$Node 151 java/util/HashMap$Node
+ciMethodData java/util/HashMap$Node <init> (ILjava/lang/Object;Ljava/lang/Object;Ljava/util/HashMap$Node;)V 2 3933 orig 264 104 163 91 85 0 0 0 0 72 97 17 23 0 0 0 0 80 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 77 68 79 32 101 120 116 114 97 32 100 97 116 97 32 108 111 99 107 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 63 1 0 0 241 112 0 0 1 0 0 0 0 0 0 0 0 0 0 0 2 0 0 0 0 0 3 0 2 0 0 0 16 0 0 0 255 255 255 255 2 0 1 0 0 0 0 0 data 2 0x10002 0xe1e oops 0
+ciMethodData java/util/HashMap newNode (ILjava/lang/Object;Ljava/lang/Object;Ljava/util/HashMap$Node;)Ljava/util/HashMap$Node; 2 3902 orig 264 104 163 91 85 0 0 0 0 88 59 17 23 0 0 0 0 80 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 77 68 79 32 101 120 116 114 97 32 100 97 116 97 32 108 111 99 107 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 196 1 0 0 209 107 0 0 1 0 0 0 0 0 0 0 0 0 0 0 2 0 0 0 0 0 3 0 2 0 0 0 16 0 0 0 255 255 255 255 2 0 9 0 0 0 0 0 data 2 0x90002 0xd7a oops 0
+ciMethodData java/util/HashMap afterNodeInsertion (Z)V 2 1535 orig 264 104 163 91 85 0 0 0 0 0 63 17 23 0 0 0 0 40 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 77 68 79 32 101 120 116 114 97 32 100 97 116 97 32 108 111 99 107 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 196 1 0 0 217 33 0 0 1 0 0 0 0 0 0 0 0 0 0 0 2 0 0 0 0 0 3 0 1 0 0 0 0 0 0 0 255 255 255 255 0 0 0 0 0 0 0 0 data 0 oops 0
+ciMethodData java/util/HashMap afterNodeAccess (Ljava/util/HashMap$Node;)V 2 1370 orig 264 104 163 91 85 0 0 0 0 112 62 17 23 0 0 0 0 40 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 77 68 79 32 101 120 116 114 97 32 100 97 116 97 32 108 111 99 107 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 77 1 0 0 97 32 0 0 1 0 0 0 0 0 0 0 0 0 0 0 2 0 0 0 0 0 3 0 1 0 0 0 0 0 0 0 255 255 255 255 0 0 0 0 0 0 0 0 data 0 oops 0
+instanceKlass java/lang/invoke/LambdaForm$MH
+instanceKlass sun/awt/windows/WToolkit$$Lambda$17
+instanceKlass java/lang/invoke/LambdaForm$DMH
+instanceKlass sun/awt/SunToolkit$1
+instanceKlass java/awt/KeyboardFocusManager$2
+instanceKlass java/awt/Cursor$CursorDisposer
+instanceKlass java/awt/event/MouseEvent$1
+instanceKlass sun/awt/AWTAccessor$MouseEventAccessor
+instanceKlass java/awt/AWTEvent$2
+instanceKlass sun/awt/ModalExclude
+instanceKlass javax/swing/KeyboardManager
+instanceKlass javax/swing/JComponent$IntVector
+instanceKlass javax/swing/JComponent$KeyboardState
+instanceKlass java/awt/KeyboardFocusManager$5
+instanceKlass javax/swing/Scrollable
+instanceKlass java/text/AttributedString$AttributedStringIterator
+instanceKlass java/text/AttributedCharacterIterator
+instanceKlass java/text/CharacterIterator
+instanceKlass java/text/AttributedString
+instanceKlass sun/awt/im/CompositionAreaHandler
+instanceKlass java/util/Collections$EmptyIterator
+instanceKlass sun/util/locale/InternalLocaleBuilder$CaseInsensitiveChar
+instanceKlass sun/util/locale/InternalLocaleBuilder
+instanceKlass sun/util/locale/StringTokenIterator
+instanceKlass sun/util/locale/ParseStatus
+instanceKlass sun/util/locale/LanguageTag
+instanceKlass sun/awt/im/InputMethodAdapter
+instanceKlass java/awt/im/spi/InputMethod
+instanceKlass java/awt/im/spi/InputMethodContext
+instanceKlass java/awt/im/InputMethodRequests
+instanceKlass java/awt/im/InputContext
+instanceKlass java/awt/KeyboardFocusManager$3
+instanceKlass java/awt/KeyboardFocusManager$LightweightFocusRequest
+instanceKlass java/awt/DefaultKeyboardFocusManager$TypeAheadMarker
+instanceKlass java/awt/KeyboardFocusManager$HeavyweightFocusRequest
+instanceKlass java/util/TimSort
+instanceKlass sun/java2d/loops/GraphicsPrimitiveMgr$PrimitiveSpec
+instanceKlass sun/awt/image/MultiResolutionImage
+instanceKlass Palikat
+instanceKlass java/lang/StrictMath
+instanceKlass sun/awt/SunGraphicsCallback
+instanceKlass sun/java2d/d3d/D3DScreenUpdateManager$$Lambda$16
+instanceKlass sun/java2d/pipe/BufferedPaints
+instanceKlass sun/java2d/d3d/D3DSurfaceData$1
+instanceKlass sun/java2d/d3d/D3DSurfaceData$1Status
+instanceKlass javax/swing/RepaintManager$4
+instanceKlass sun/awt/GlobalCursorManager$NativeUpdater
+instanceKlass sun/awt/GlobalCursorManager
+instanceKlass java/awt/SequencedEvent$1
+instanceKlass sun/awt/AWTAccessor$SequencedEventAccessor
+instanceKlass java/awt/SplashScreen
+instanceKlass java/awt/EventQueue$4
+instanceKlass sun/awt/NullComponentPeer
+instanceKlass java/awt/peer/LightweightPeer
+instanceKlass sun/awt/im/ExecutableInputMethodManager$3
+instanceKlass sun/awt/im/InputMethodLocator
+instanceKlass sun/awt/windows/WInputMethodDescriptor
+instanceKlass java/awt/im/spi/InputMethodDescriptor
+instanceKlass sun/awt/im/InputMethodManager
+instanceKlass sun/awt/FontConfiguration$2
+instanceKlass sun/awt/Win32FontManager$2
+instanceKlass sun/font/SunFontManager$3
+instanceKlass sun/font/FontFamily
+instanceKlass sun/font/Font2DHandle
+instanceKlass sun/font/CompositeFontDescriptor
+instanceKlass java/io/DataInput
+instanceKlass sun/awt/FontDescriptor
+instanceKlass sun/awt/FontConfiguration
+instanceKlass sun/font/SunFontManager$FontRegistrationInfo
+instanceKlass sun/font/SunFontManager$2
+instanceKlass sun/awt/Win32FontManager$1
+instanceKlass sun/font/FontManagerFactory$1
+instanceKlass sun/font/FontManagerFactory
+instanceKlass sun/font/GlyphList
+instanceKlass sun/font/StrikeCache$1
+instanceKlass sun/font/StrikeCache
+instanceKlass sun/font/FontStrike
+instanceKlass sun/font/CharToGlyphMapper
+instanceKlass sun/font/StrikeMetrics
+instanceKlass sun/font/Font2D
+instanceKlass sun/font/FontUtilities$1
+instanceKlass sun/font/FontUtilities
+instanceKlass sun/font/FontManagerNativeLibrary$1
+instanceKlass sun/font/FontManagerNativeLibrary
+instanceKlass sun/font/SunFontManager$1
+instanceKlass sun/font/SunFontManager$T1Filter
+instanceKlass sun/font/SunFontManager$TTFilter
+instanceKlass java/io/FilenameFilter
+instanceKlass sun/font/SunFontManager
+instanceKlass sun/font/FontManagerForSGE
+instanceKlass sun/font/FontManager
+instanceKlass sun/java2d/FontSupport
+instanceKlass sun/awt/NativeLibLoader$1
+instanceKlass sun/awt/NativeLibLoader
+instanceKlass sun/awt/PlatformFont
+instanceKlass java/awt/peer/FontPeer
+instanceKlass sun/awt/windows/WColor
+instanceKlass sun/java2d/StateTrackableDelegate$1
+instanceKlass sun/java2d/StateTracker$2
+instanceKlass sun/java2d/StateTracker$1
+instanceKlass sun/java2d/StateTracker
+instanceKlass sun/java2d/SurfaceDataProxy
+instanceKlass sun/awt/image/SurfaceManager$FlushableCacheData
+instanceKlass sun/java2d/DefaultDisposerRecord
+instanceKlass sun/java2d/windows/GDIRenderer
+instanceKlass sun/java2d/loops/GraphicsPrimitiveMgr$2
+instanceKlass sun/java2d/loops/GraphicsPrimitiveMgr$1
+instanceKlass sun/java2d/loops/GeneralRenderer
+instanceKlass sun/java2d/loops/CustomComponent
+instanceKlass sun/java2d/pipe/ValidatePipe
+instanceKlass java/awt/BasicStroke
+instanceKlass java/awt/geom/Path2D
+instanceKlass java/awt/AlphaComposite
+instanceKlass sun/java2d/loops/XORComposite
+instanceKlass java/awt/Composite
+instanceKlass sun/awt/ConstrainableGraphics
+instanceKlass sun/java2d/loops/CompositeType
+instanceKlass sun/java2d/loops/GraphicsPrimitiveMgr
+instanceKlass sun/java2d/d3d/D3DBlitLoops
+instanceKlass sun/java2d/loops/GraphicsPrimitive
+instanceKlass sun/java2d/loops/ProcessPath$DrawHandler
+instanceKlass sun/java2d/pipe/BufferedRenderPipe$AAParallelogramPipe
+instanceKlass sun/java2d/pipe/BufferedRenderPipe
+instanceKlass sun/java2d/pipe/hw/AccelSurface
+instanceKlass sun/java2d/d3d/D3DScreenUpdateManager$$Lambda$15
+instanceKlass sun/java2d/d3d/D3DScreenUpdateManager$$Lambda$14
+instanceKlass sun/java2d/ScreenUpdateManager
+instanceKlass javax/swing/RepaintManager$2$1
+instanceKlass java/util/LinkedList$ListItr
+instanceKlass javax/swing/RepaintManager$2
+instanceKlass sun/awt/windows/WComponentPeer$2
+instanceKlass sun/awt/im/InputMethodWindow
+instanceKlass sun/awt/ExtendedKeyCodes
+instanceKlass sun/awt/RepaintArea
+instanceKlass sun/awt/windows/WWindowPeer$GuiDisposedListener
+instanceKlass sun/awt/windows/WWindowPeer$ActiveWindowListener
+instanceKlass java/awt/peer/CanvasPeer
+instanceKlass java/awt/peer/PanelPeer
+instanceKlass java/awt/peer/FramePeer
+instanceKlass java/awt/peer/WindowPeer
+instanceKlass java/awt/peer/ContainerPeer
+instanceKlass javax/swing/ActionMap
+instanceKlass java/awt/event/KeyEvent$1
+instanceKlass sun/awt/AWTAccessor$KeyEventAccessor
+instanceKlass java/awt/VKCollection
+instanceKlass javax/swing/InputMap
+instanceKlass javax/swing/LayoutComparator
+instanceKlass java/util/function/IntBinaryOperator
+instanceKlass java/util/function/LongBinaryOperator
+instanceKlass java/util/function/DoubleBinaryOperator
+instanceKlass java/util/function/BinaryOperator
+instanceKlass java/util/function/BiFunction
+instanceKlass java/util/function/IntToDoubleFunction
+instanceKlass java/util/function/IntToLongFunction
+instanceKlass java/util/function/IntUnaryOperator
+instanceKlass java/util/function/IntFunction
+instanceKlass java/util/stream/LongStream
+instanceKlass java/util/stream/DoubleStream
+instanceKlass java/util/stream/Stream
+instanceKlass java/util/stream/IntStream
+instanceKlass java/util/stream/BaseStream
+instanceKlass java/util/Spliterator$OfDouble
+instanceKlass java/util/Spliterator$OfInt
+instanceKlass java/util/Spliterator$OfLong
+instanceKlass java/util/Spliterator$OfPrimitive
+instanceKlass java/util/Spliterator
+instanceKlass javax/swing/SortingFocusTraversalPolicy$1
+instanceKlass javax/swing/RepaintManager$PaintManager
+instanceKlass javax/swing/JRootPane$RootLayout
+instanceKlass javax/swing/ArrayTable
+instanceKlass java/awt/Window$WindowDisposerRecord
+instanceKlass java/awt/BorderLayout
+instanceKlass java/awt/LayoutManager2
+instanceKlass java/awt/GraphicsConfiguration
+instanceKlass sun/awt/image/SurfaceManager$ProxiedGraphicsConfig
+instanceKlass sun/java2d/pipe/hw/AccelGraphicsConfig
+instanceKlass sun/java2d/pipe/hw/BufferedContextProvider
+instanceKlass java/util/regex/Matcher
+instanceKlass java/util/regex/MatchResult
+instanceKlass java/util/regex/Pattern$TreeInfo
+instanceKlass java/util/regex/Pattern$Node
+instanceKlass java/util/regex/Pattern
+instanceKlass java/awt/TrayIcon
+instanceKlass java/awt/MenuComponent
+instanceKlass java/awt/EventQueue$3
+instanceKlass sun/awt/dnd/SunDragSourceContextPeer
+instanceKlass java/awt/dnd/peer/DragSourceContextPeer
+instanceKlass sun/awt/EventQueueDelegate
+instanceKlass java/awt/ModalEventFilter
+instanceKlass java/awt/EventDispatchThread$HierarchyEventFilter
+instanceKlass java/awt/EventFilter
+instanceKlass java/awt/EventDispatchThread$1
+instanceKlass java/awt/Conditional
+instanceKlass sun/java2d/pipe/BufferedContext
+instanceKlass sun/awt/EventQueueItem
+instanceKlass sun/java2d/pipe/hw/ContextCapabilities
+instanceKlass java/awt/EventQueue$5
+instanceKlass java/awt/event/InvocationEvent$1
+instanceKlass sun/awt/AWTAccessor$InvocationEventAccessor
+instanceKlass java/awt/ActiveEvent
+instanceKlass javax/swing/Timer$1
+instanceKlass sun/java2d/d3d/D3DGraphicsDevice$1
+instanceKlass sun/java2d/d3d/D3DGraphicsDevice$1Result
+instanceKlass sun/java2d/d3d/D3DRenderQueue$1
+instanceKlass sun/java2d/pipe/RenderBuffer
+instanceKlass sun/java2d/pipe/RenderQueue
+instanceKlass sun/misc/PerfCounter$WindowsClientCounters
+instanceKlass java/awt/GraphicsDevice
