@@ -5,7 +5,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Random;
 
 import javax.swing.Timer;
 import javax.swing.JPanel;
@@ -20,7 +22,7 @@ public class Pelilogiikka extends JPanel implements KeyListener, ActionListener{
 	private Pelilauta pelilauta;
 	private int rivi, sarake;
 	private boolean initialized;
-	
+	int[][] uusiArray;
 	Palikat currentPalikka;
 	
 	public Pelilogiikka() {
@@ -43,27 +45,28 @@ public class Pelilogiikka extends JPanel implements KeyListener, ActionListener{
 		for(int i=rivi-1; i>=0; i--) {
 			for(int j=sarake-1; j>=0; j--) {
 				
-				if(pelilauta.staattinenLauta[i][j] ==0 && pelilauta.palikkaKoordinaatit[i][j] == 1) {
+				
+				if(pelilauta.staattinenLauta[i][j] ==0 && pelilauta.palikkaKoordinaatit[i][j] != 0) {
 					if(saakoLiikkua(i, j)) {
 						int koordinaattiArvo = pelilauta.lauta2D[i][j];
 						
 						if(pelilauta.palikkaKoordinaatit[i][j] != 0 && palikkaLiikkeessa) {
+							// Päivitä värikartta
 							pelilauta.lauta2D[i][j] = 0;
 							pelilauta.lauta2D[i+1][j] = koordinaattiArvo;
+							
+							// Päivitä tippuvan palikan koordinaatit
 							pelilauta.palikkaKoordinaatit[i][j] = 0;
 							pelilauta.palikkaKoordinaatit[i+1][j] = 1;
 						}
 					} else {
 						if(palikkaLiikkeessa) {
 							updateStaattinenLauta(i,j);
+							
 						}
-						System.out.println("stop" + " " + i + " " + j);
+						//System.out.println("stop" + " " + i + " " + j);
 						for (int[] row: pelilauta.palikkaKoordinaatit)
 						    Arrays.fill(row, 0);
-						
-						System.out.println(Arrays.deepToString(pelilauta.palikkaKoordinaatit).replace("], ", "]\n").replace("[[", "[").replace("]]", "]"));
-						break;
-						
 					}
 				}
 			}
@@ -72,71 +75,130 @@ public class Pelilogiikka extends JPanel implements KeyListener, ActionListener{
 		
 	}
 	
-	public void liikuSivulle() {
+	public void liikuOikealle() {
 		for(int i=rivi-1; i>=0; i--) {
 			for(int j=sarake-1; j>=0; j--) {
-				
+				int koordinaattiArvo = pelilauta.lauta2D[i][j];
+				if(pelilauta.staattinenLauta[i][j] ==0 && pelilauta.palikkaKoordinaatit[i][j] != 0 && j<=sarake-1) {
+					// Päivitä värikartta
+					pelilauta.lauta2D[i][j] = 0;
+					pelilauta.lauta2D[i][j+1] = koordinaattiArvo;
+					
+					// Päivitä tippuvan palikan koordinaatit
+					pelilauta.palikkaKoordinaatit[i][j] = 0;
+					pelilauta.palikkaKoordinaatit[i][j+1] = 1;
+				}
+			}
+		}		
+	}
+	
+	public void liikuVasemmalle() {
+		for(int i=0; i<rivi; i++) {
+			for(int j=0; j<sarake; j++) {
+				int koordinaattiArvo = pelilauta.lauta2D[i][j];
+				if(pelilauta.staattinenLauta[i][j] ==0 && pelilauta.palikkaKoordinaatit[i][j] != 0 && j<=sarake-1) {
+					// Päivitä värikartta
+					pelilauta.lauta2D[i][j] = 0;
+					pelilauta.lauta2D[i][j-1] = koordinaattiArvo;
+					
+					// Päivitä tippuvan palikan koordinaatit
+					pelilauta.palikkaKoordinaatit[i][j] = 0;
+					pelilauta.palikkaKoordinaatit[i][j-1] = 1;
+				}
 			}
 		}		
 	}
 	
 	public void updateStaattinenLauta(int x, int y) {
+		System.out.println("("+ x + ", " + y);
 		pelilauta.staattinenLauta[x][y] = 1;
 		palikkaLiikkeessa = false;
-		tarkistaNaapuri(x,y);
+		updateNaapuri(x,y);
 	}
 	
-	public void tarkistaNaapuri(int x, int y) {
-		if(y< sarake-1) {
-			if(pelilauta.staattinenLauta[x][y+1] == 0 && pelilauta.lauta2D[x][y] == pelilauta.lauta2D[x][y+1]) {
-				pelilauta.staattinenLauta[x][y+1]=1;
-				tarkistaNaapuri(x, y+1);
+	/**
+	 * Laudan renderöinti alkaa oikeasta alakulmasta, palikan pisteen pitää tarkistaa kaikki palikan viereisetkin pisteet siltä varalta, ettei
+	 * 
+	 * @param x
+	 * @param y
+	 */
+	public void updateNaapuri(int x, int y) {
+	
+			if(y< sarake-1) {
+				tarkistaNaapuri(x,y,0,1);
 			}
-		}
-		
-		if(pelilauta.staattinenLauta[x][y-1] == 0 && pelilauta.lauta2D[x][y] == pelilauta.lauta2D[x][y-1]) {
-			pelilauta.staattinenLauta[x][y-1]=1;
-			tarkistaNaapuri(x, y-1);
-		}
-		
-		if(x<rivi-1) {
-			if(pelilauta.staattinenLauta[x+1][y] == 0 && pelilauta.lauta2D[x][y] == pelilauta.lauta2D[x+1][y]) {
-				System.out.println(x);
-				pelilauta.staattinenLauta[x+1][y]=1;
-				tarkistaNaapuri(x+1, y);
+			
+			if(y>0) {
+				tarkistaNaapuri(x,y,0,-1);
 			}
+			
+			if(x<rivi-1) {
+				tarkistaNaapuri(x,y,1,0);
+			}
+			
+			tarkistaNaapuri(x,y,-1,0);
+	}
+	
+	public void tarkistaNaapuri(int x, int y, int lisaysX, int lisaysY) {
+		if(pelilauta.staattinenLauta[x+lisaysX][y+lisaysY] == 0 && pelilauta.palikkaKoordinaatit[x][y] == pelilauta.palikkaKoordinaatit[x+lisaysX][y+lisaysY]) {
+			pelilauta.staattinenLauta[x+lisaysX][y+lisaysY]=currentPalikka.arvo;
+			updateNaapuri(x+lisaysX, y + lisaysY);
 		}
-
-		if(pelilauta.staattinenLauta[x-1][y] == 0 && pelilauta.lauta2D[x][y] == pelilauta.lauta2D[x-1][y] && x>0) {
-			pelilauta.staattinenLauta[x-1][y]=1;
-			tarkistaNaapuri(x-1, y);
-		}
-		//System.out.println(Arrays.deepToString(pelilauta.staattinenLauta).replace("], ", "]\n").replace("[[", "[").replace("]]", "]"));
 	}
 	
 	
 	
 	public boolean saakoLiikkua(int i, int j) {
-		if(i<=19) {
-			if(i==19) {
-				i=18;
-			}
-			if((pelilauta.lauta2D[i+1][j] == 0 && pelilauta.staattinenLauta[i+1][j]==0)) {
-				return true;
-			}
+		
+		if(i==19) {
+			i=18;
 		}
+		if((pelilauta.palikkaKoordinaatit[i+1][j] == 0 && pelilauta.staattinenLauta[i+1][j]==0)) {
+				if(tarkistaViereiset(i,j)) {	
+					return true;
+				}
+		}
+		
 		return false;
 	}
 	
+	public boolean tarkistaViereiset(int x, int y) {
+		try {
+			for(int i=1; i<=currentPalikka.koordinaatit.length; i++) {
+				
+				if(pelilauta.palikkaKoordinaatit[x][y-i]==1 && pelilauta.staattinenLauta[x+1][y-i]!=0) {
+					System.out.println("(" + x + ", " + y + ")");
+					return false;
+				}
+			}
+			// Helpompi ignoorata indexOutOfBoundsException kokonaan, sillä se ei vaikuta mihinkään tässä metodissas.
+		} catch(Exception e) {}
+		return true;
+	}
+	
 	// Tässä metodissa päätetään palikan muoto ja väri.
+	// HYVIN KESKENERÄINEN !!!!!
 	public void luoPalikka() {
-		//System.out.println(Arrays.deepToString(pelilauta.).replace("], ", "]\n").replace("[[", "[").replace("]]", "]"));
-		int arvo = 2;
-		int[][] pArray = {{arvo, 0,arvo,0},{arvo,arvo,arvo}};
+		Random r = new Random();
+		int arvo = r.nextInt(4)+1;
+		int arvo2 = r.nextInt(4)+1;
 		
+		int[][] pArray = {{arvo, 0,0}, {arvo,arvo,arvo}, {0,0,0}};
 		
-		currentPalikka = new Palikat(pArray, arvo, pelilauta);
-		System.out.println(Arrays.deepToString(pelilauta.palikkaKoordinaatit).replace("], ", "]\n").replace("[[", "[").replace("]]", "]"));
+		int[][] pArray2 = {{arvo, 0,0}, {arvo,arvo,arvo}, {0,0,0}};
+		int[][] pArray3 = {{arvo, 0,arvo}, {arvo,arvo,arvo}, {0,0,0}};
+		int[][] pArray4 = {{arvo, arvo,arvo}, {0,0,0}, {0,0,0}};
+		int[][] pArray5 = {{arvo, arvo,arvo}, {arvo,arvo,arvo}, {0,0,0}};
+		ArrayList<int[][]> muodot = new ArrayList<int[][]>();
+		muodot.add(pArray);
+		muodot.add(pArray2);
+		muodot.add(pArray3);
+		muodot.add(pArray4);
+		muodot.add(pArray5);
+		System.out.println(arvo2);
+		
+		currentPalikka = new Palikat(muodot.get(0), arvo2, pelilauta);
+		//System.out.println(Arrays.deepToString(pelilauta.palikkaKoordinaatit).replace("], ", "]\n").replace("[[", "[").replace("]]", "]"));
 	}
 	
 	/**
@@ -169,10 +231,20 @@ public class Pelilogiikka extends JPanel implements KeyListener, ActionListener{
 	public void keyPressed(KeyEvent arg0) {
 		// TODO Auto-generated method stub
 		if(arg0.getKeyCode() == KeyEvent.VK_ENTER) {
-			System.out.println("Presse key");
+			System.out.println("Pressed key");
 			
 			luoPalikka();
 			palikkaLiikkeessa=true;
+		} else if(arg0.getKeyCode() == KeyEvent.VK_RIGHT) {
+			liikuOikealle();
+		} else if(arg0.getKeyCode() == KeyEvent.VK_LEFT) {
+			liikuVasemmalle();
+		} else if(arg0.getKeyCode() == KeyEvent.VK_SPACE) {
+			System.out.println(Arrays.deepToString(pelilauta.palikkaKoordinaatit).replace("], ", "]\n").replace("[[", "[").replace("]]", "]"));
+			
+			pelilauta.palikkaKoordinaatit[0][5] = 0;
+			pelilauta.palikkaKoordinaatit[0][4] = 0;
+			System.out.println(Arrays.deepToString(pelilauta.palikkaKoordinaatit).replace("], ", "]\n").replace("[[", "[").replace("]]", "]"));
 		}
 		
 	}
@@ -188,5 +260,4 @@ public class Pelilogiikka extends JPanel implements KeyListener, ActionListener{
 		// TODO Auto-generated method stub
 		
 	}
-
 }

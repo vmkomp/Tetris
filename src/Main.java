@@ -11,7 +11,7 @@ public class Main {
 		Pelilogiikka peliLogiikka = new Pelilogiikka();
 		JFrame gameWindow = new JFrame();
 		gameWindow.setBounds(10,10,700,600);
-		gameWindow.setTitle("Kullitetris");
+		gameWindow.setTitle("Kikkelitetris");
 		gameWindow.setResizable(false);
 		gameWindow.setVisible(true);
 		gameWindow.add(peliLogiikka);

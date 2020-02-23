@@ -46,6 +46,14 @@ public class Pelilauta {
 					g.setColor(Color.red);
 					g.fillRect(j * nelionPituus, i * nelionPituus, nelionPituus, nelionPituus);
 					break;
+				case 3:
+					g.setColor(Color.green);
+					g.fillRect(j * nelionPituus, i * nelionPituus, nelionPituus, nelionPituus);
+					break;
+				case 4:
+					g.setColor(Color.orange);
+					g.fillRect(j * nelionPituus, i * nelionPituus, nelionPituus, nelionPituus);
+					break;
 			}
 
 				
