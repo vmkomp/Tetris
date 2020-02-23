@@ -14,15 +14,12 @@ import javax.swing.JPanel;
 
 public class Pelilogiikka extends JPanel implements KeyListener, ActionListener{
 
-	private boolean play = false;
-	private boolean palikkaLiikkeessa = true;
 	private int score = 0;
 	private Timer timer;
 	private int delay = 150;
 	private Pelilauta pelilauta;
 	private int rivi, sarake;
 	private boolean initialized;
-	int[][] uusiArray;
 	Palikat currentPalikka;
 	
 	public Pelilogiikka() {
@@ -39,80 +36,59 @@ public class Pelilogiikka extends JPanel implements KeyListener, ActionListener{
 	}
 	
 	// KESKENERÄINEN!! Keksikää lisää logiikkaa palikoille ja luokaa uusia metodeja.
-	// 1 - sininen
-	// 2 - punainen
 	public void liikutaPalikkaa() {
-		for(int i=rivi-1; i>=0; i--) {
+		
+		for(int i=rivi-2; i>=0; i--) {
 			for(int j=sarake-1; j>=0; j--) {
 				
-				
-				if(pelilauta.staattinenLauta[i][j] ==0 && pelilauta.palikkaKoordinaatit[i][j] != 0) {
+				if(onkoVarattuStaattinen(i,j,0) && onkoVarattuLiikkuva(i,j,1)) {
 					if(saakoLiikkua(i, j)) {
-						int koordinaattiArvo = pelilauta.lauta2D[i][j];
+						updateLiikkuvaKoordinaatti(i,j,0);
+						updateLiikkuvaKoordinaatti(i+1, j, 1);
 						
-						if(pelilauta.palikkaKoordinaatit[i][j] != 0 && palikkaLiikkeessa) {
-							// Päivitä värikartta
-							pelilauta.lauta2D[i][j] = 0;
-							pelilauta.lauta2D[i+1][j] = koordinaattiArvo;
-							
-							// Päivitä tippuvan palikan koordinaatit
-							pelilauta.palikkaKoordinaatit[i][j] = 0;
-							pelilauta.palikkaKoordinaatit[i+1][j] = 1;
-						}
 					} else {
-						if(palikkaLiikkeessa) {
-							updateStaattinenLauta(i,j);
-							
-						}
-						//System.out.println("stop" + " " + i + " " + j);
-						for (int[] row: pelilauta.palikkaKoordinaatit)
+						updateStaattinenLauta(i,j);
+						for (int[] row: pelilauta.annaLiikkuvaTaulukko())
 						    Arrays.fill(row, 0);
 					}
 				}
 			}
-		}
-		//System.out.println("---------------");
-		
+		}	
 	}
 	
+	// Oli helpompi tehdä kummallekkin suunnalle oma metodi.
+	// Oikealle liikkuminen renderöidään taulukon oikeasta alakulmasta alkaen.
 	public void liikuOikealle() {
+		
 		for(int i=rivi-1; i>=0; i--) {
 			for(int j=sarake-1; j>=0; j--) {
-				int koordinaattiArvo = pelilauta.lauta2D[i][j];
-				if(pelilauta.staattinenLauta[i][j] ==0 && pelilauta.palikkaKoordinaatit[i][j] != 0 && j<=sarake-1) {
-					// Päivitä värikartta
-					pelilauta.lauta2D[i][j] = 0;
-					pelilauta.lauta2D[i][j+1] = koordinaattiArvo;
-					
-					// Päivitä tippuvan palikan koordinaatit
-					pelilauta.palikkaKoordinaatit[i][j] = 0;
-					pelilauta.palikkaKoordinaatit[i][j+1] = 1;
+				if(onkoVarattuStaattinen(i,j,0) && onkoVarattuLiikkuva(i,j,1) && j<=sarake-1) {
+
+					updateLiikkuvaKoordinaatti(i,j,0);
+					updateLiikkuvaKoordinaatti(i, j+1, 1);
 				}
 			}
 		}		
 	}
 	
+	// Vasemmalla liikkuminen renderöidään vasemmalta yläkulmasta alkaen.
 	public void liikuVasemmalle() {
+		
 		for(int i=0; i<rivi; i++) {
 			for(int j=0; j<sarake; j++) {
-				int koordinaattiArvo = pelilauta.lauta2D[i][j];
-				if(pelilauta.staattinenLauta[i][j] ==0 && pelilauta.palikkaKoordinaatit[i][j] != 0 && j<=sarake-1) {
-					// Päivitä värikartta
-					pelilauta.lauta2D[i][j] = 0;
-					pelilauta.lauta2D[i][j-1] = koordinaattiArvo;
+				
+				if(onkoVarattuStaattinen(i,j,0) && onkoVarattuLiikkuva(i,j,1) && j<=sarake-1) {
 					
-					// Päivitä tippuvan palikan koordinaatit
-					pelilauta.palikkaKoordinaatit[i][j] = 0;
-					pelilauta.palikkaKoordinaatit[i][j-1] = 1;
+					updateLiikkuvaKoordinaatti(i,j,0);
+					updateLiikkuvaKoordinaatti(i, j-1, 1);
 				}
 			}
 		}		
 	}
 	
 	public void updateStaattinenLauta(int x, int y) {
-		System.out.println("("+ x + ", " + y);
-		pelilauta.staattinenLauta[x][y] = 1;
-		palikkaLiikkeessa = false;
+		
+		updateStaattinenKoordinaatti(x,y,currentPalikka.annaVariArvo());
 		updateNaapuri(x,y);
 	}
 	
@@ -140,20 +116,17 @@ public class Pelilogiikka extends JPanel implements KeyListener, ActionListener{
 	}
 	
 	public void tarkistaNaapuri(int x, int y, int lisaysX, int lisaysY) {
-		if(pelilauta.staattinenLauta[x+lisaysX][y+lisaysY] == 0 && pelilauta.palikkaKoordinaatit[x][y] == pelilauta.palikkaKoordinaatit[x+lisaysX][y+lisaysY]) {
-			pelilauta.staattinenLauta[x+lisaysX][y+lisaysY]=currentPalikka.arvo;
+		
+		if(onkoVarattuStaattinen(x+lisaysX, y+lisaysY, 0) && onkoVarattuLiikkuva(x,y, pelilauta.annaLiikkuvaTaulukko()[x+lisaysX][y+lisaysY])){
+			
+			updateStaattinenKoordinaatti(x+lisaysX, y+lisaysY, currentPalikka.annaVariArvo());
 			updateNaapuri(x+lisaysX, y + lisaysY);
 		}
 	}
 	
-	
-	
 	public boolean saakoLiikkua(int i, int j) {
-		
-		if(i==19) {
-			i=18;
-		}
-		if((pelilauta.palikkaKoordinaatit[i+1][j] == 0 && pelilauta.staattinenLauta[i+1][j]==0)) {
+
+		if((onkoVarattuLiikkuva(i+1,j,0) && onkoVarattuStaattinen(i+1,j,0))) {
 				if(tarkistaViereiset(i,j)) {	
 					return true;
 				}
@@ -164,10 +137,10 @@ public class Pelilogiikka extends JPanel implements KeyListener, ActionListener{
 	
 	public boolean tarkistaViereiset(int x, int y) {
 		try {
-			for(int i=1; i<=currentPalikka.koordinaatit.length; i++) {
+			int palikanKokoX = currentPalikka.annaKoordinaatit().length;
+			for(int i=1; i<= palikanKokoX; i++) {
 				
-				if(pelilauta.palikkaKoordinaatit[x][y-i]==1 && pelilauta.staattinenLauta[x+1][y-i]!=0) {
-					System.out.println("(" + x + ", " + y + ")");
+				if(onkoVarattuLiikkuva(x,y-i,1) && !onkoVarattuStaattinen(x+1,y-i,0)) {
 					return false;
 				}
 			}
@@ -176,8 +149,24 @@ public class Pelilogiikka extends JPanel implements KeyListener, ActionListener{
 		return true;
 	}
 	
+	public boolean onkoVarattuStaattinen(int i, int j, int onkoVarattu) {
+		return pelilauta.annaStaattinenTaulukko()[i][j] == onkoVarattu;
+	}
+	
+	public boolean onkoVarattuLiikkuva(int i, int j, int onkoVarattu) {
+		return pelilauta.annaLiikkuvaTaulukko()[i][j] == onkoVarattu;
+	}
+	
+	public void updateLiikkuvaKoordinaatti(int i, int j, int uusiArvo) {
+		pelilauta.annaLiikkuvaTaulukko()[i][j] = uusiArvo;
+	}
+	
+	public void updateStaattinenKoordinaatti(int i, int j, int uusiArvo) {
+		pelilauta.annaStaattinenTaulukko()[i][j] = uusiArvo;
+	}
+	
 	// Tässä metodissa päätetään palikan muoto ja väri.
-	// HYVIN KESKENERÄINEN !!!!!
+	// HYVIN KESKENERÄINEN !!!!!!!!!--------------------
 	public void luoPalikka() {
 		Random r = new Random();
 		int arvo = r.nextInt(4)+1;
@@ -210,18 +199,18 @@ public class Pelilogiikka extends JPanel implements KeyListener, ActionListener{
 	public void paint(Graphics g) {
 		g.setColor(Color.black);
 		g.fillRect(1, 1, 692, 592);
-		pelilauta.luoLauta((Graphics2D)g);
+		pelilauta.luoLauta((Graphics2D)g, currentPalikka);
 		if(!initialized) {
 			luoPalikka();	
 			initialized = true;
 		}
-		
 	}
 	
 	
 	// Ruudun päivistys tapahtuu täällä
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
+		//System.out.println(Arrays.deepToString(pelilauta.palikkaKoordinaatit).replace("], ", "]\n").replace("[[", "[").replace("]]", "]"));
 		timer.start();
 		repaint();
 		liikutaPalikkaa();
@@ -230,23 +219,17 @@ public class Pelilogiikka extends JPanel implements KeyListener, ActionListener{
 	@Override
 	public void keyPressed(KeyEvent arg0) {
 		// TODO Auto-generated method stub
-		if(arg0.getKeyCode() == KeyEvent.VK_ENTER) {
-			System.out.println("Pressed key");
-			
-			luoPalikka();
-			palikkaLiikkeessa=true;
-		} else if(arg0.getKeyCode() == KeyEvent.VK_RIGHT) {
-			liikuOikealle();
-		} else if(arg0.getKeyCode() == KeyEvent.VK_LEFT) {
-			liikuVasemmalle();
-		} else if(arg0.getKeyCode() == KeyEvent.VK_SPACE) {
-			System.out.println(Arrays.deepToString(pelilauta.palikkaKoordinaatit).replace("], ", "]\n").replace("[[", "[").replace("]]", "]"));
-			
-			pelilauta.palikkaKoordinaatit[0][5] = 0;
-			pelilauta.palikkaKoordinaatit[0][4] = 0;
-			System.out.println(Arrays.deepToString(pelilauta.palikkaKoordinaatit).replace("], ", "]\n").replace("[[", "[").replace("]]", "]"));
-		}
-		
+		switch(arg0.getKeyCode()) {
+			case(KeyEvent.VK_ENTER):
+				luoPalikka();
+				break;
+			case(KeyEvent.VK_RIGHT):
+				liikuOikealle();
+				break;
+			case(KeyEvent.VK_LEFT):
+				liikuVasemmalle();
+				break;
+		}	
 	}
 
 	@Override

@@ -4,56 +4,47 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 
 public class Pelilauta {
-	public int lauta2D[][];
-	public int staattinenLauta[][];
+	private int variTaulukko[][];
+	private int staattinenTaulukko[][];
 	public int nelionPituus;
-	public int palikkaKoordinaatit[][];
+	private int liikkuvaTaulukko[][];
 	
 	public Pelilauta(int rivi, int sarake) {
-		lauta2D = new int[rivi][sarake];
-		staattinenLauta = new int[rivi][sarake];
-		palikkaKoordinaatit = new int[rivi][sarake];
-		for(int i=0; i< lauta2D.length; i++) {
-			for(int j=0; j< lauta2D[0].length; j++) {
-					lauta2D[i][j] = 0;
-					staattinenLauta[i][j] = 0;
-					palikkaKoordinaatit[i][j]=0;
-					
+		
+		variTaulukko = new int[rivi][sarake];
+		staattinenTaulukko = new int[rivi][sarake];
+		liikkuvaTaulukko = new int[rivi][sarake];
+		nelionPituus = 20;
+		
+		for(int i=0; i< variTaulukko.length; i++) {
+			for(int j=0; j< variTaulukko[0].length; j++) {
+				
+				variTaulukko[i][j] = 0;
+				staattinenTaulukko[i][j] = 0;
+				liikkuvaTaulukko[i][j]=0;
 			}
 		}
-		
-		nelionPituus = 20;
 	}
 	
 	/**
 	 * Luo uuden pelilaudan.
-	 * @param lauta2D 	Taulukko, joka sisällyttää palikoiden värien arvot.
+	 * @param variTaulukko 	Taulukko, joka sisällyttää palikoiden värien arvot.
 	 */
 
-	public void luoLauta(Graphics2D g) {
-		for(int i=0; i< lauta2D.length; i++) {
-			for(int j=0; j< lauta2D[0].length; j++) {
-				switch(lauta2D[i][j]) {
-				case 0:
-					g.setColor(Color.white);
-					g.fillRect(j * nelionPituus, i * nelionPituus, nelionPituus, nelionPituus);
-					break;
-				case 1:
-					g.setColor(Color.blue);
-					g.fillRect(j * nelionPituus, i * nelionPituus, nelionPituus, nelionPituus);
-					break;
-				case 2:
-					g.setColor(Color.red);
-					g.fillRect(j * nelionPituus, i * nelionPituus, nelionPituus, nelionPituus);
-					break;
-				case 3:
-					g.setColor(Color.green);
-					g.fillRect(j * nelionPituus, i * nelionPituus, nelionPituus, nelionPituus);
-					break;
-				case 4:
-					g.setColor(Color.orange);
-					g.fillRect(j * nelionPituus, i * nelionPituus, nelionPituus, nelionPituus);
-					break;
+	public void luoLauta(Graphics2D g, Palikat p) {
+		for(int i=0; i< variTaulukko.length; i++) {
+			for(int j=0; j< variTaulukko[0].length; j++) {
+				
+				if(liikkuvaTaulukko[i][j] == 1){
+					
+					piirraVari(g, p.annaVariArvo(), i, j);
+				} else if(staattinenTaulukko[i][j] != 0) {
+					
+					piirraVari(g, staattinenTaulukko[i][j], i, j);
+				} else {
+					
+				g.setColor(Color.white);
+				g.fillRect(j * nelionPituus, i * nelionPituus, nelionPituus, nelionPituus);
 			}
 
 				
@@ -64,11 +55,40 @@ public class Pelilauta {
 		}
 	}
 	
+	public void piirraVari(Graphics2D g, int arvo, int i, int j) {
+			switch(arvo) {
+			case 1:
+				g.setColor(Color.blue);
+				g.fillRect(j * nelionPituus, i * nelionPituus, nelionPituus, nelionPituus);
+				break;
+			case 2:
+				g.setColor(Color.red);
+				g.fillRect(j * nelionPituus, i * nelionPituus, nelionPituus, nelionPituus);
+				break;
+			case 3:
+				g.setColor(Color.green);
+				g.fillRect(j * nelionPituus, i * nelionPituus, nelionPituus, nelionPituus);
+				break;
+			case 4:
+				g.setColor(Color.orange);
+				g.fillRect(j * nelionPituus, i * nelionPituus, nelionPituus, nelionPituus);
+				break;
+		}
+	}
+	
 	// Palikan grafiikoiden luonti.
-	public void luoPalikkaGrafiikat(int xKoordinaatti, int yKoordinaatti, int arvo) {
+	public void alustaPalikka(int xKoordinaatti, int yKoordinaatti, int arvo) {
 		
-			lauta2D[xKoordinaatti][yKoordinaatti] = arvo;
-			palikkaKoordinaatit[xKoordinaatti][yKoordinaatti] = 1;
+			variTaulukko[xKoordinaatti][yKoordinaatti] = arvo;
+			liikkuvaTaulukko[xKoordinaatti][yKoordinaatti] = 1;
+	}
+	
+	public int[][] annaStaattinenTaulukko() {
+		return staattinenTaulukko;
+	}
+	
+	public int[][] annaLiikkuvaTaulukko() {
+		return liikkuvaTaulukko;
 	}
 
 }
