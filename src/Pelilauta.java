@@ -79,8 +79,8 @@ public class Pelilauta {
 	// Palikan grafiikoiden luonti.
 	public void alustaPalikka(int xKoordinaatti, int yKoordinaatti, int arvo) {
 		
-			variTaulukko[xKoordinaatti][yKoordinaatti] = arvo;
-			liikkuvaTaulukko[xKoordinaatti][yKoordinaatti] = 1;
+		variTaulukko[xKoordinaatti][yKoordinaatti] = arvo;
+		liikkuvaTaulukko[xKoordinaatti][yKoordinaatti] = 1;
 	}
 	
 	public int[][] annaStaattinenTaulukko() {

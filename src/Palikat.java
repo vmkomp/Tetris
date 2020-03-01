@@ -4,10 +4,13 @@ import java.awt.Graphics2D;
 public class Palikat {
 	public int[][] koordinaatit;
 	public int variArvo;
+	public int ruutujenMaaraPalikassa;
 	
 	// Palikan konstruktori. Alusta arrayt, variArvot ja palikan koordinaatit.
 	public Palikat(int[][] koordinaatit, int variArvo, Pelilauta pelilauta) {
+		
 		this.koordinaatit = koordinaatit;
+		ruutujenMaaraPalikassa = 0;
 		int uusiX = 0;
 		int uusiY = 0;
 		this.variArvo = variArvo;
@@ -16,6 +19,7 @@ public class Palikat {
 		for(int i=0; i< koordinaatit.length; i++) {
 			for(int j=0; j<koordinaatit[i].length; j++) {
 				if(koordinaatit[i][j] != 0) {
+					ruutujenMaaraPalikassa++;
 					uusiX = i;
 					uusiY = j+3;
 				}

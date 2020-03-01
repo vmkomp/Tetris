@@ -14,13 +14,15 @@ import javax.swing.JPanel;
 
 public class Pelilogiikka extends JPanel implements KeyListener, ActionListener{
 
-	private int score = 0;
 	private Timer timer;
-	private int delay = 150;
+	private Palikat currentPalikka;
 	private Pelilauta pelilauta;
+	
+	private int delay = 150;
 	private int rivi, sarake;
+	
 	private boolean initialized;
-	Palikat currentPalikka;
+	
 	
 	public Pelilogiikka() {
 		
@@ -28,132 +30,121 @@ public class Pelilogiikka extends JPanel implements KeyListener, ActionListener{
 		rivi = 20;
 		sarake = 10;
 		pelilauta = new Pelilauta(rivi, sarake);
+		
 		addKeyListener(this);
 		setFocusable(true);
 		setFocusTraversalKeysEnabled(false);
+		
 		timer = new Timer(delay, this);
 		timer.start();
 	}
 	
-	// KESKENERƒINEN!! Keksik‰‰ lis‰‰ logiikkaa palikoille ja luokaa uusia metodeja.
-	public void liikutaPalikkaa() {
+	enum Liikkumistyyppi {
+		SIVULLE,
+		ALAS
+	}
+	
+	public void liikutaAlas() {
 		
-		for(int i=rivi-2; i>=0; i--) {
-			for(int j=sarake-1; j>=0; j--) {
-				
-				if(onkoVarattuStaattinen(i,j,0) && onkoVarattuLiikkuva(i,j,1)) {
-					if(saakoLiikkua(i, j)) {
-						updateLiikkuvaKoordinaatti(i,j,0);
-						updateLiikkuvaKoordinaatti(i+1, j, 1);
+		Liikkumistyyppi liikkumistyyppi = Liikkumistyyppi.ALAS;
+		
+		IteroituTaulukko iteroituTaulukko = new IteroituTaulukko(liikkumistyyppi, 1, 0);
+		iteroituTaulukko.iteroiTaulukko();
+		
+		paivitaTaulukko(iteroituTaulukko.saakoLiikkua(), iteroituTaulukko.pisteet(), liikkumistyyppi,1,0);
+	}
+	
+	
+	public void liikuSivulle(int suunta) {
+		
+		Liikkumistyyppi liikkumistyyppi = Liikkumistyyppi.SIVULLE;
+		
+		IteroituTaulukko iteroituTaulukko = new IteroituTaulukko(liikkumistyyppi, 0, suunta);
+		iteroituTaulukko.iteroiTaulukko();
+		
+		paivitaTaulukko(iteroituTaulukko.saakoLiikkua(), iteroituTaulukko.pisteet(), liikkumistyyppi,0,suunta);
+	}
+	
+	private class IteroituTaulukko{
+		
+		public boolean saakoLiikkua;
+		public ArrayList<Piste> pisteet;
+		private int lisaaX, lisaaY;
+		private Liikkumistyyppi liikkumistyyppi;
+		
+		public IteroituTaulukko(Liikkumistyyppi liikkumistyyppi, int lisaaX, int lisaaY){
+			pisteet = new ArrayList<Piste>();
+			saakoLiikkua = true;
+			this.lisaaX = lisaaX;
+			this.lisaaY = lisaaY;
+			this.liikkumistyyppi = liikkumistyyppi;
+		}
+		
+		public boolean saakoLiikkua() {
+			return saakoLiikkua;
+		}
+		public ArrayList<Piste> pisteet(){
+			return pisteet;
+		}
+		public void iteroiTaulukko() {
+
+			for(int i=rivi-1; i>=0; i--) {
+				for(int j=sarake-1; j>=0; j--) {
+					if(onkoVarattuLiikkuva(i,j,1)) {
 						
-					} else {
-						updateStaattinenLauta(i,j);
-						for (int[] row: pelilauta.annaLiikkuvaTaulukko())
-						    Arrays.fill(row, 0);
+						try {
+							if(!onkoVarattuStaattinen(i+lisaaX,j+lisaaY,0)) {
+								saakoLiikkua = false;
+							}
+								pisteet.add(new Piste(i,j));
+								
+						} catch(Exception e) {
+							pisteet.add(new Piste(i,j));
+							saakoLiikkua = false;
+						}
+
 					}
 				}
 			}
-		}	
-	}
-	
-	// Oli helpompi tehd‰ kummallekkin suunnalle oma metodi.
-	// Oikealle liikkuminen renderˆid‰‰n taulukon oikeasta alakulmasta alkaen.
-	public void liikuOikealle() {
-		
-		for(int i=rivi-1; i>=0; i--) {
-			for(int j=sarake-1; j>=0; j--) {
-				if(onkoVarattuStaattinen(i,j,0) && onkoVarattuLiikkuva(i,j,1) && j<=sarake-1) {
-
-					updateLiikkuvaKoordinaatti(i,j,0);
-					updateLiikkuvaKoordinaatti(i, j+1, 1);
-				}
-			}
-		}		
-	}
-	
-	// Vasemmalla liikkuminen renderˆid‰‰n vasemmalta yl‰kulmasta alkaen.
-	public void liikuVasemmalle() {
-		
-		for(int i=0; i<rivi; i++) {
-			for(int j=0; j<sarake; j++) {
-				
-				if(onkoVarattuStaattinen(i,j,0) && onkoVarattuLiikkuva(i,j,1) && j<=sarake-1) {
-					
-					updateLiikkuvaKoordinaatti(i,j,0);
-					updateLiikkuvaKoordinaatti(i, j-1, 1);
-				}
-			}
-		}		
-	}
-	
-	public void updateStaattinenLauta(int x, int y) {
-		
-		updateStaattinenKoordinaatti(x,y,currentPalikka.annaVariArvo());
-		updateNaapuri(x,y);
-	}
-	
-	/**
-	 * Laudan renderˆinti alkaa oikeasta alakulmasta, palikan pisteen pit‰‰ tarkistaa kaikki palikan viereisetkin pisteet silt‰ varalta, ettei
-	 * 
-	 * @param x
-	 * @param y
-	 */
-	public void updateNaapuri(int x, int y) {
-	
-			if(y< sarake-1) {
-				tarkistaNaapuri(x,y,0,1);
-			}
-			
-			if(y>0) {
-				tarkistaNaapuri(x,y,0,-1);
-			}
-			
-			if(x<rivi-1) {
-				tarkistaNaapuri(x,y,1,0);
-			}
-			
-			tarkistaNaapuri(x,y,-1,0);
-	}
-	
-	public void tarkistaNaapuri(int x, int y, int lisaysX, int lisaysY) {
-		
-		if(onkoVarattuStaattinen(x+lisaysX, y+lisaysY, 0) && onkoVarattuLiikkuva(x,y, pelilauta.annaLiikkuvaTaulukko()[x+lisaysX][y+lisaysY])){
-			
-			updateStaattinenKoordinaatti(x+lisaysX, y+lisaysY, currentPalikka.annaVariArvo());
-			updateNaapuri(x+lisaysX, y + lisaysY);
 		}
 	}
 	
-	public boolean saakoLiikkua(int i, int j) {
-
-		if((onkoVarattuLiikkuva(i+1,j,0) && onkoVarattuStaattinen(i+1,j,0))) {
-				if(tarkistaViereiset(i,j)) {	
-					return true;
-				}
-		}
-		
-		return false;
-	}
-	
-	public boolean tarkistaViereiset(int x, int y) {
-		try {
-			int palikanKokoX = currentPalikka.annaKoordinaatit().length;
-			for(int i=1; i<= palikanKokoX; i++) {
+	public void paivitaTaulukko(boolean saakoLiikkua, ArrayList<Piste> pisteet, Liikkumistyyppi liikkumistyyppi, int lisaaX, int lisaaY) {
+		if(saakoLiikkua) {
+			for(Piste point : pisteet) {
+				updateLiikkuvaKoordinaatti(point.annaX(),point.annaY(),0);
 				
-				if(onkoVarattuLiikkuva(x,y-i,1) && !onkoVarattuStaattinen(x+1,y-i,0)) {
-					return false;
-				}
 			}
-			// Helpompi ignoorata indexOutOfBoundsException kokonaan, sill‰ se ei vaikuta mihink‰‰n t‰ss‰ metodissas.
-		} catch(Exception e) {}
-		return true;
+			for(Piste point : pisteet) {
+				updateLiikkuvaKoordinaatti(point.annaX()+lisaaX,point.annaY()+lisaaY,1);
+			}
+			
+		} else if(liikkumistyyppi == Liikkumistyyppi.ALAS) {
+	
+			for(int i=0; i<pisteet.size(); i++) {
+				
+				int xKoordinaatti = pisteet.get(i).annaX();
+				int yKoordinaatti = pisteet.get(i).annaY();
+				updateStaattinenKoordinaatti(xKoordinaatti, yKoordinaatti, currentPalikka.annaVariArvo());
+			}
+			
+			nollaaTaulukot(pisteet);
+			
+			}
 	}
 	
-	public boolean onkoVarattuStaattinen(int i, int j, int onkoVarattu) {
+	public void nollaaTaulukot(ArrayList<Piste> pisteet) {
+		
+		pisteet.clear();
+		for (int[] row: pelilauta.annaLiikkuvaTaulukko())
+		    Arrays.fill(row, 0);
+	}
+
+	private boolean onkoVarattuStaattinen(int i, int j, int onkoVarattu) {
 		return pelilauta.annaStaattinenTaulukko()[i][j] == onkoVarattu;
 	}
 	
-	public boolean onkoVarattuLiikkuva(int i, int j, int onkoVarattu) {
+	private boolean onkoVarattuLiikkuva(int i, int j, int onkoVarattu) {
 		return pelilauta.annaLiikkuvaTaulukko()[i][j] == onkoVarattu;
 	}
 	
@@ -165,8 +156,8 @@ public class Pelilogiikka extends JPanel implements KeyListener, ActionListener{
 		pelilauta.annaStaattinenTaulukko()[i][j] = uusiArvo;
 	}
 	
-	// T‰ss‰ metodissa p‰‰tet‰‰n palikan muoto ja v‰ri.
 	// HYVIN KESKENERƒINEN !!!!!!!!!--------------------
+	// VAIN TESTEJƒ VARTEN
 	public void luoPalikka() {
 		Random r = new Random();
 		int arvo = r.nextInt(4)+1;
@@ -186,34 +177,30 @@ public class Pelilogiikka extends JPanel implements KeyListener, ActionListener{
 		muodot.add(pArray5);
 		System.out.println(arvo2);
 		
-		currentPalikka = new Palikat(muodot.get(0), arvo2, pelilauta);
-		//System.out.println(Arrays.deepToString(pelilauta.palikkaKoordinaatit).replace("], ", "]\n").replace("[[", "[").replace("]]", "]"));
-	}
+		currentPalikka = new Palikat(muodot.get(arvo), arvo2, pelilauta);
 	
-	/**
-	 * Piirt‰‰ ikkunan, pelilaudan ja kaikki muu grafiikkaan kuuluvan. 
-	 * P‰ivitys tapahtuu delayn(1000ms) v‰lein.
-	 * 
-	 *  @param g 	Vastaa pelilaudan ulkopuolisista grafiikoista.
-	 */
+	}
+
 	public void paint(Graphics g) {
 		g.setColor(Color.black);
 		g.fillRect(1, 1, 692, 592);
 		pelilauta.luoLauta((Graphics2D)g, currentPalikka);
-		if(!initialized) {
-			luoPalikka();	
-			initialized = true;
-		}
+		
 	}
 	
 	
 	// Ruudun p‰ivistys tapahtuu t‰‰ll‰
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		//System.out.println(Arrays.deepToString(pelilauta.palikkaKoordinaatit).replace("], ", "]\n").replace("[[", "[").replace("]]", "]"));
+		if(!initialized) {
+			luoPalikka();
+			initialized = true;
+		}
 		timer.start();
 		repaint();
-		liikutaPalikkaa();
+		if(initialized) {
+			liikutaAlas();
+		}
 	}
 
 	@Override
@@ -224,10 +211,10 @@ public class Pelilogiikka extends JPanel implements KeyListener, ActionListener{
 				luoPalikka();
 				break;
 			case(KeyEvent.VK_RIGHT):
-				liikuOikealle();
+				liikuSivulle(1);
 				break;
 			case(KeyEvent.VK_LEFT):
-				liikuVasemmalle();
+				liikuSivulle(-1);
 				break;
 		}	
 	}
