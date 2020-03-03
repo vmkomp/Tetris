@@ -15,7 +15,7 @@ import javax.swing.JPanel;
 public class Pelilogiikka extends JPanel implements KeyListener, ActionListener{
 
 	private Timer timer;
-	private Palikat currentPalikka;
+	private Muoto currentPalikka;
 	private Pelilauta pelilauta;
 	
 	private int delay = 150;
@@ -44,11 +44,15 @@ public class Pelilogiikka extends JPanel implements KeyListener, ActionListener{
 		ALAS
 	}
 	
+	
 	public void liikutaAlas() {
 		
 		Liikkumistyyppi liikkumistyyppi = Liikkumistyyppi.ALAS;
 		
-		IteroituTaulukko iteroituTaulukko = new IteroituTaulukko(liikkumistyyppi, 1, 0);
+		// 1,0: ALAS
+		// 0,-1: VASEMMALLE
+		// 0, 1: OIKEALLE
+		IteroituTaulukko iteroituTaulukko = new IteroituTaulukko(1, 0);
 		iteroituTaulukko.iteroiTaulukko();
 		
 		paivitaTaulukko(iteroituTaulukko.saakoLiikkua(), iteroituTaulukko.pisteet(), liikkumistyyppi,1,0);
@@ -58,8 +62,10 @@ public class Pelilogiikka extends JPanel implements KeyListener, ActionListener{
 	public void liikuSivulle(int suunta) {
 		
 		Liikkumistyyppi liikkumistyyppi = Liikkumistyyppi.SIVULLE;
-		
-		IteroituTaulukko iteroituTaulukko = new IteroituTaulukko(liikkumistyyppi, 0, suunta);
+		// 1,0: ALAS
+		// 0,-1: VASEMMALLE
+		// 0, 1: OIKEALLE
+		IteroituTaulukko iteroituTaulukko = new IteroituTaulukko(0, suunta);
 		iteroituTaulukko.iteroiTaulukko();
 		
 		paivitaTaulukko(iteroituTaulukko.saakoLiikkua(), iteroituTaulukko.pisteet(), liikkumistyyppi,0,suunta);
@@ -70,14 +76,18 @@ public class Pelilogiikka extends JPanel implements KeyListener, ActionListener{
 		public boolean saakoLiikkua;
 		public ArrayList<Piste> pisteet;
 		private int lisaaX, lisaaY;
-		private Liikkumistyyppi liikkumistyyppi;
 		
-		public IteroituTaulukko(Liikkumistyyppi liikkumistyyppi, int lisaaX, int lisaaY){
+		public IteroituTaulukko(int lisaaX, int lisaaY){
+			
 			pisteet = new ArrayList<Piste>();
 			saakoLiikkua = true;
 			this.lisaaX = lisaaX;
 			this.lisaaY = lisaaY;
-			this.liikkumistyyppi = liikkumistyyppi;
+		}
+		
+		public IteroituTaulukko() {
+			pisteet = new ArrayList<Piste>();
+			saakoLiikkua = true;
 		}
 		
 		public boolean saakoLiikkua() {
@@ -98,7 +108,7 @@ public class Pelilogiikka extends JPanel implements KeyListener, ActionListener{
 							}
 								pisteet.add(new Piste(i,j));
 								
-						} catch(Exception e) {
+						} catch(ArrayIndexOutOfBoundsException e) {
 							pisteet.add(new Piste(i,j));
 							saakoLiikkua = false;
 						}
@@ -107,9 +117,45 @@ public class Pelilogiikka extends JPanel implements KeyListener, ActionListener{
 				}
 			}
 		}
+		
+		public void iteroiTaulukkoRotaatio() {
+			int suurinX = 1000;
+			int suurinY = 1000;
+			for(int i=rivi-1; i>=0; i--) {
+				for(int j=sarake-1; j>=0; j--) {
+					if(onkoVarattuLiikkuva(i,j,1)) {
+						pisteet.add(new Piste(i,j));
+						if(suurinX > i) {
+							suurinX = i;
+						}
+						if(suurinY > j) {
+							suurinY = j;
+						}
+					}
+				}
+			}
+			for(int i=0; i<pisteet.size(); i++) {
+				int uusiX = pisteet.get(i).annaX()-suurinX;
+				int uusiY = pisteet.get(i).annaY()-suurinY;
+				pisteet.set(i, new Piste(uusiX, uusiY));
+			}
+			
+			for(Piste piste : pisteet) {
+				System.out.println(piste.annaX() +  ", " +  piste.annaY());
+				int x_new = piste.annaY();
+				int y_new = 1 - (piste.annaX() - (1));
+				// TODO ETSI MUODON KESKIKOHTA SEN PALIKOIDEN MƒƒRƒN PERUSTEELLA
+				// TODO TEE TƒMƒ METODI MUOTO CLASSIIN!
+				
+				//updateLiikkuvaKoordinaatti(piste.annaX()+suurinX, piste.annaY()+ suurinX,0);
+				//updateLiikkuvaKoordinaatti(x_new + suurinX, y_new+ suurinY, 1);
+			}
+			
+		}
 	}
 	
 	public void paivitaTaulukko(boolean saakoLiikkua, ArrayList<Piste> pisteet, Liikkumistyyppi liikkumistyyppi, int lisaaX, int lisaaY) {
+		
 		if(saakoLiikkua) {
 			for(Piste point : pisteet) {
 				updateLiikkuvaKoordinaatti(point.annaX(),point.annaY(),0);
@@ -136,6 +182,7 @@ public class Pelilogiikka extends JPanel implements KeyListener, ActionListener{
 	public void nollaaTaulukot(ArrayList<Piste> pisteet) {
 		
 		pisteet.clear();
+		
 		for (int[] row: pelilauta.annaLiikkuvaTaulukko())
 		    Arrays.fill(row, 0);
 	}
@@ -177,7 +224,7 @@ public class Pelilogiikka extends JPanel implements KeyListener, ActionListener{
 		muodot.add(pArray5);
 		System.out.println(arvo2);
 		
-		currentPalikka = new Palikat(muodot.get(arvo), arvo2, pelilauta);
+		currentPalikka = new Muoto(muodot.get(arvo), arvo2, pelilauta);
 	
 	}
 
@@ -188,8 +235,6 @@ public class Pelilogiikka extends JPanel implements KeyListener, ActionListener{
 		
 	}
 	
-	
-	// Ruudun p‰ivistys tapahtuu t‰‰ll‰
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		if(!initialized) {
@@ -216,6 +261,9 @@ public class Pelilogiikka extends JPanel implements KeyListener, ActionListener{
 			case(KeyEvent.VK_LEFT):
 				liikuSivulle(-1);
 				break;
+			case(KeyEvent.VK_SPACE):
+				IteroituTaulukko iteroituTaulukko = new IteroituTaulukko();
+				iteroituTaulukko.iteroiTaulukkoRotaatio();
 		}	
 	}
 

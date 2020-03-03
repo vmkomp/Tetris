@@ -31,7 +31,7 @@ public class Pelilauta {
 	 * @param variTaulukko 	Taulukko, joka sis‰llytt‰‰ palikoiden v‰rien arvot.
 	 */
 
-	public void luoLauta(Graphics2D g, Palikat p) {
+	public void luoLauta(Graphics2D g, Muoto p) {
 		for(int i=0; i< variTaulukko.length; i++) {
 			for(int j=0; j< variTaulukko[0].length; j++) {
 				
