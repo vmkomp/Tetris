@@ -71,11 +71,19 @@ public class Pelilogiikka extends JPanel implements KeyListener, ActionListener{
 		paivitaTaulukko(iteroituTaulukko.saakoLiikkua(), iteroituTaulukko.pisteet(), liikkumistyyppi,0,suunta);
 	}
 	
+	public void kaannaMuoto() {
+		IteroituTaulukko iteroituTaulukko = new IteroituTaulukko(0,-1);
+		iteroituTaulukko.iteroiTaulukko();
+		if(iteroituTaulukko.saakoLiikkua()) {
+			paivitaTaulukkoRotaatio(iteroituTaulukko.pisteet(), iteroituTaulukko.pieninX(), iteroituTaulukko.pieninY());
+		}
+	}
+	
 	private class IteroituTaulukko{
 		
 		public boolean saakoLiikkua;
 		public ArrayList<Piste> pisteet;
-		private int lisaaX, lisaaY;
+		private int lisaaX, lisaaY, pieninX, pieninY;
 		
 		public IteroituTaulukko(int lisaaX, int lisaaY){
 			
@@ -84,20 +92,23 @@ public class Pelilogiikka extends JPanel implements KeyListener, ActionListener{
 			this.lisaaX = lisaaX;
 			this.lisaaY = lisaaY;
 		}
-		
-		public IteroituTaulukko() {
-			pisteet = new ArrayList<Piste>();
-			saakoLiikkua = true;
-		}
-		
+
 		public boolean saakoLiikkua() {
 			return saakoLiikkua;
 		}
 		public ArrayList<Piste> pisteet(){
 			return pisteet;
 		}
+		public int pieninX() {
+			return pieninX;
+		}
+		public int pieninY() {
+			return pieninY;
+		}
+		
 		public void iteroiTaulukko() {
-
+			pieninX = 1000;
+			pieninY = 1000;
 			for(int i=rivi-1; i>=0; i--) {
 				for(int j=sarake-1; j>=0; j--) {
 					if(onkoVarattuLiikkuva(i,j,1)) {
@@ -107,6 +118,8 @@ public class Pelilogiikka extends JPanel implements KeyListener, ActionListener{
 								saakoLiikkua = false;
 							}
 								pisteet.add(new Piste(i,j));
+								pieninX = paivitaPienin(pieninX, i);
+								pieninY = paivitaPienin(pieninY, j);
 								
 						} catch(ArrayIndexOutOfBoundsException e) {
 							pisteet.add(new Piste(i,j));
@@ -117,41 +130,43 @@ public class Pelilogiikka extends JPanel implements KeyListener, ActionListener{
 				}
 			}
 		}
-		
-		public void iteroiTaulukkoRotaatio() {
-			int suurinX = 1000;
-			int suurinY = 1000;
-			for(int i=rivi-1; i>=0; i--) {
-				for(int j=sarake-1; j>=0; j--) {
-					if(onkoVarattuLiikkuva(i,j,1)) {
-						pisteet.add(new Piste(i,j));
-						if(suurinX > i) {
-							suurinX = i;
-						}
-						if(suurinY > j) {
-							suurinY = j;
-						}
-					}
-				}
-			}
-			for(int i=0; i<pisteet.size(); i++) {
-				int uusiX = pisteet.get(i).annaX()-suurinX;
-				int uusiY = pisteet.get(i).annaY()-suurinY;
-				pisteet.set(i, new Piste(uusiX, uusiY));
-			}
-			
-			for(Piste piste : pisteet) {
-				System.out.println(piste.annaX() +  ", " +  piste.annaY());
-				int x_new = piste.annaY();
-				int y_new = 1 - (piste.annaX() - (1));
-				// TODO ETSI MUODON KESKIKOHTA SEN PALIKOIDEN MƒƒRƒN PERUSTEELLA
-				// TODO TEE TƒMƒ METODI MUOTO CLASSIIN!
-				
-				//updateLiikkuvaKoordinaatti(piste.annaX()+suurinX, piste.annaY()+ suurinX,0);
-				//updateLiikkuvaKoordinaatti(x_new + suurinX, y_new+ suurinY, 1);
-			}
-			
+	}
+	
+	public int paivitaPienin(int pienin, int vertailtava) {
+		if(pienin > vertailtava) {
+			return vertailtava;
 		}
+		return pienin;
+	}
+	
+	public void paivitaTaulukkoRotaatio(ArrayList<Piste> pisteet, int pieninX, int pieninY) {
+		//Luo pisteet
+		luoUudetPisteetRotaatio(pisteet, pieninX, pieninY);
+		
+		// Lis‰‰ uudet pisteet liikkuvaan koordinaatistoon.
+		lisaaUudetPisteetRotaatio(pisteet, pieninX, pieninY);
+		
+	}
+	
+	public void luoUudetPisteetRotaatio(ArrayList<Piste> pisteet, int pieninX, int pieninY) {
+		
+		for(int i=0; i<pisteet.size(); i++) {
+			int uusiX = pisteet.get(i).annaX()-pieninX;
+			int uusiY = pisteet.get(i).annaY()-pieninY;
+			int uudempiX =  -uusiY;
+			int uudempiY = uusiX;
+			pisteet.set(i, new Piste(uudempiX, uudempiY));
+		}
+	}
+	
+	public void lisaaUudetPisteetRotaatio(ArrayList<Piste> pisteet, int pieninX, int pieninY) {
+		
+		nollaaTaulukko(pelilauta.annaLiikkuvaTaulukko());
+		
+		for(Piste piste : pisteet) {
+			updateLiikkuvaKoordinaatti(piste.annaX()+pieninX, piste.annaY()+ pieninY,1);
+		}
+		pisteet.clear();
 	}
 	
 	public void paivitaTaulukko(boolean saakoLiikkua, ArrayList<Piste> pisteet, Liikkumistyyppi liikkumistyyppi, int lisaaX, int lisaaY) {
@@ -174,16 +189,15 @@ public class Pelilogiikka extends JPanel implements KeyListener, ActionListener{
 				updateStaattinenKoordinaatti(xKoordinaatti, yKoordinaatti, currentPalikka.annaVariArvo());
 			}
 			
-			nollaaTaulukot(pisteet);
+			nollaaTaulukko(pelilauta.annaLiikkuvaTaulukko());
+			pisteet.clear();
 			
 			}
 	}
 	
-	public void nollaaTaulukot(ArrayList<Piste> pisteet) {
+	public void nollaaTaulukko(int[][] taulukko) {
 		
-		pisteet.clear();
-		
-		for (int[] row: pelilauta.annaLiikkuvaTaulukko())
+		for (int[] row: taulukko)
 		    Arrays.fill(row, 0);
 	}
 
@@ -262,8 +276,7 @@ public class Pelilogiikka extends JPanel implements KeyListener, ActionListener{
 				liikuSivulle(-1);
 				break;
 			case(KeyEvent.VK_SPACE):
-				IteroituTaulukko iteroituTaulukko = new IteroituTaulukko();
-				iteroituTaulukko.iteroiTaulukkoRotaatio();
+				kaannaMuoto();
 		}	
 	}
 
