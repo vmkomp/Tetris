@@ -61,8 +61,7 @@ public class Tietokanta {
 						+ "primary key(id));");
 				// Luo tallennetaulun
 				Statement state3 = con.createStatement();
-				state3.execute("CREATE TABLE tallenne (id integer," + "tallenne varchar(200)," + "score integer(30),"
-						+ "primary key(id));");
+				state3.execute("CREATE TABLE tallenne (id integer," + "tallenne varchar(200));");
 
 				// Syöttää 10 default-tulosta
 				for (int i = 1; i < 11; i++) {
@@ -74,10 +73,9 @@ public class Tietokanta {
 					prep.execute();
 				}
 
-				PreparedStatement pre2 = con.prepareStatement("INSERT INTO tallenne values(?,?,?);");
+				PreparedStatement pre2 = con.prepareStatement("INSERT INTO tallenne values(?,?);");
 				pre2.setInt(1, 1);
 				pre2.setString(2, "default");
-				pre2.setInt(3, 0);
 				pre2.execute();
 
 			}
@@ -142,14 +140,36 @@ public class Tietokanta {
 
 	// Luo taulun pelitallenteelle
 	// taulussa vain yksi paikka tallenteelle
-	public void tallennaPeli(String tallenne, String score) throws SQLException {
+	public void tallennaPeli(String tallenne) throws SQLException {
 
-		PreparedStatement prep = con.prepareStatement("INSERT INTO tallenne values(?,?,?);");
+		PreparedStatement prep = con.prepareStatement("INSERT INTO tallenne values(?,?);");
 
 		prep.setInt(1, 1);
 		prep.setString(2, tallenne);
-		prep.setString(3, score);
 		prep.execute();
 	}
 
+	public String lataaPeli() throws ClassNotFoundException, SQLException {
+		if (con == null) {
+			getConnection();
+		}
+
+		Statement state = con.createStatement();
+		ResultSet res = state.executeQuery("SELECT tallenne FROM tallenne");
+	
+
+		StringBuilder teksti = new StringBuilder();
+
+		try {
+			
+			teksti.append(res.getString("tallenne"));
+		
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		
+		return teksti.toString();
+		
+	}
 }

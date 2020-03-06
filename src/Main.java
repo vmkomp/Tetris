@@ -45,6 +45,8 @@ public abstract class Main {
 		gameWindow.setVisible(true);
 	}
 	
+	
+	
 	public static void luoIkkuna2() {
 		
 		 

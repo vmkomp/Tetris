@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
@@ -24,6 +25,8 @@ public class Pelilogiikka extends JPanel implements KeyListener, ActionListener{
 	
 	private boolean initialized;
 	
+	private Tietokanta t;
+	
 	
 	public Pelilogiikka() {
 		
@@ -31,6 +34,7 @@ public class Pelilogiikka extends JPanel implements KeyListener, ActionListener{
 		rivi = 20;
 		sarake = 10;
 		pelilauta = new Pelilauta(rivi, sarake);
+		t = new Tietokanta();
 		
 
 		addKeyListener(this);
@@ -313,6 +317,21 @@ public class Pelilogiikka extends JPanel implements KeyListener, ActionListener{
 				break;
 			case(KeyEvent.VK_SPACE):
 				kaannaMuoto();
+			case(KeyEvent.VK_0):
+			try {
+				tallennaPeli();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+				break;
+			case(KeyEvent.VK_1):
+			try {
+				System.out.println(t.lataaPeli());
+			} catch (ClassNotFoundException | SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}	
 	}
 
@@ -326,5 +345,20 @@ public class Pelilogiikka extends JPanel implements KeyListener, ActionListener{
 	public void keyTyped(KeyEvent arg0) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	public String muutaMerkkijonoksi() {
+		StringBuilder sb = new StringBuilder();
+		for(int[] s1 : pelilauta.annaStaattinenTaulukko()){
+		    for(int s2 : s1){
+		        sb.append(s2);
+		    }
+		}
+		String table = sb.toString();
+		return table;
+	}
+	
+	public void tallennaPeli() throws SQLException {
+		t.tallennaPeli(muutaMerkkijonoksi());
 	}
 }
