@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.Random;
 
 import javax.swing.Timer;
+import javax.swing.JButton;
 import javax.swing.JPanel;
 
 public class Pelilogiikka extends JPanel implements KeyListener, ActionListener{
@@ -31,6 +32,7 @@ public class Pelilogiikka extends JPanel implements KeyListener, ActionListener{
 		sarake = 10;
 		pelilauta = new Pelilauta(rivi, sarake);
 		
+
 		addKeyListener(this);
 		setFocusable(true);
 		setFocusTraversalKeysEnabled(false);
@@ -54,6 +56,7 @@ public class Pelilogiikka extends JPanel implements KeyListener, ActionListener{
 		// 0, 1: OIKEALLE
 		IteroituTaulukko iteroituTaulukko = new IteroituTaulukko(1, 0);
 		iteroituTaulukko.iteroiTaulukko();
+		iteroituTaulukko.iteroiRivit();
 		
 		paivitaTaulukko(iteroituTaulukko.saakoLiikkua(), iteroituTaulukko.pisteet(), liikkumistyyppi,1,0);
 	}
@@ -72,18 +75,22 @@ public class Pelilogiikka extends JPanel implements KeyListener, ActionListener{
 	}
 	
 	public void kaannaMuoto() {
+		
 		IteroituTaulukko iteroituTaulukko = new IteroituTaulukko(0,-1);
+		IteroituTaulukko iteroituTaulukko2 = new IteroituTaulukko(0,1);
 		iteroituTaulukko.iteroiTaulukko();
-		if(iteroituTaulukko.saakoLiikkua()) {
-			paivitaTaulukkoRotaatio(iteroituTaulukko.pisteet(), iteroituTaulukko.pieninX(), iteroituTaulukko.pieninY());
+		iteroituTaulukko2.iteroiTaulukko();
+		if(iteroituTaulukko.saakoLiikkua() && iteroituTaulukko2.saakoLiikkua()) {
+			paivitaTaulukkoRotaatio(iteroituTaulukko.pisteet(), iteroituTaulukko.normalisointiX(), iteroituTaulukko.normalisointiY());
 		}
+		
 	}
 	
 	private class IteroituTaulukko{
 		
 		public boolean saakoLiikkua;
 		public ArrayList<Piste> pisteet;
-		private int lisaaX, lisaaY, pieninX, pieninY;
+		private int lisaaX, lisaaY, normalisointiX, normalisointiY;
 		
 		public IteroituTaulukko(int lisaaX, int lisaaY){
 			
@@ -99,28 +106,33 @@ public class Pelilogiikka extends JPanel implements KeyListener, ActionListener{
 		public ArrayList<Piste> pisteet(){
 			return pisteet;
 		}
-		public int pieninX() {
-			return pieninX;
+		public int normalisointiX() {
+			return normalisointiX;
 		}
-		public int pieninY() {
-			return pieninY;
+		public int normalisointiY() {
+			return normalisointiY;
 		}
 		
 		public void iteroiTaulukko() {
-			pieninX = 1000;
-			pieninY = 1000;
+			normalisointiX = 1000;
+			normalisointiY = 1000;
 			for(int i=rivi-1; i>=0; i--) {
 				for(int j=sarake-1; j>=0; j--) {
-					if(onkoVarattuLiikkuva(i,j,1)) {
+					if(onkointattuLiikkuva(i,j,1)) {
 						
 						try {
-							if(!onkoVarattuStaattinen(i+lisaaX,j+lisaaY,0)) {
+							if(!onkointattuStaattinen(i+lisaaX,j+lisaaY,0)) {
 								saakoLiikkua = false;
 							}
+							
 								pisteet.add(new Piste(i,j));
-								pieninX = paivitaPienin(pieninX, i);
-								pieninY = paivitaPienin(pieninY, j);
 								
+								// Rotaatiota intten palikan koordinaatiston normalisointiin vaaditut luvut.
+								normalisointiX = paivitaNormalisaatioLuku(normalisointiX, i);
+								normalisointiY = paivitaNormalisaatioLuku(normalisointiY, j);
+								
+								
+						//exceptionin tapahtuessa on ulkona pelilaudasta, jolloin halutaan saada liike lakkaamaan.
 						} catch(ArrayIndexOutOfBoundsException e) {
 							pisteet.add(new Piste(i,j));
 							saakoLiikkua = false;
@@ -130,41 +142,63 @@ public class Pelilogiikka extends JPanel implements KeyListener, ActionListener{
 				}
 			}
 		}
+		
+		public void iteroiRivit() {
+			boolean isFilled;
+			int indeksi;
+			for (int row = 0; row < pelilauta.annaStaattinenTaulukko().length; row++) {
+			    isFilled = true;
+			    for (int col = 0; col < pelilauta.annaStaattinenTaulukko()[row].length; col++) {
+			        if (pelilauta.annaStaattinenTaulukko()[row][col] == 0) {
+			            isFilled = false;
+			        } else {
+			        	indeksi = row;
+			        }
+			    }
+			    if(isFilled) {
+			    	Arrays.fill(pelilauta.annaStaattinenTaulukko()[row], 0);
+			    	int[] j = {0,0,0,0,0,0,0,0,0,0};
+			        //add a new empty line sub-array to the start of the array
+			    	System.out.println("!!!!!!!!!!!!!!");
+			    }
+			    //if isFilled is still true then current row is filled
+			}
+		}
 	}
 	
-	public int paivitaPienin(int pienin, int vertailtava) {
+	public int paivitaNormalisaatioLuku(int pienin, int vertailtava) {
 		if(pienin > vertailtava) {
 			return vertailtava;
 		}
 		return pienin;
 	}
 	
-	public void paivitaTaulukkoRotaatio(ArrayList<Piste> pisteet, int pieninX, int pieninY) {
+	public void paivitaTaulukkoRotaatio(ArrayList<Piste> pisteet, int normalisointiX, int normalisointiY) {
 		//Luo pisteet
-		luoUudetPisteetRotaatio(pisteet, pieninX, pieninY);
+		luoUudetPisteetRotaatio(pisteet, normalisointiX, normalisointiY);
 		
 		// Lisää uudet pisteet liikkuvaan koordinaatistoon.
-		lisaaUudetPisteetRotaatio(pisteet, pieninX, pieninY);
+		lisaaUudetPisteetRotaatio(pisteet, normalisointiX, normalisointiY);
 		
 	}
 	
-	public void luoUudetPisteetRotaatio(ArrayList<Piste> pisteet, int pieninX, int pieninY) {
+	public void luoUudetPisteetRotaatio(ArrayList<Piste> pisteet, int normalisointiX, int normalisointiY) {
 		
 		for(int i=0; i<pisteet.size(); i++) {
-			int uusiX = pisteet.get(i).annaX()-pieninX;
-			int uusiY = pisteet.get(i).annaY()-pieninY;
+			int uusiX = pisteet.get(i).annaX()-normalisointiX;
+			int uusiY = pisteet.get(i).annaY()-normalisointiY;
 			int uudempiX =  -uusiY;
 			int uudempiY = uusiX;
 			pisteet.set(i, new Piste(uudempiX, uudempiY));
 		}
 	}
 	
-	public void lisaaUudetPisteetRotaatio(ArrayList<Piste> pisteet, int pieninX, int pieninY) {
+	public void lisaaUudetPisteetRotaatio(ArrayList<Piste> pisteet, int normalisointiX, int normalisointiY) {
 		
 		nollaaTaulukko(pelilauta.annaLiikkuvaTaulukko());
 		
 		for(Piste piste : pisteet) {
-			updateLiikkuvaKoordinaatti(piste.annaX()+pieninX, piste.annaY()+ pieninY,1);
+			updateLiikkuvaKoordinaatti(piste.annaX()+normalisointiX, piste.annaY()+ normalisointiY,1);
 		}
 		pisteet.clear();
 	}
@@ -201,12 +235,12 @@ public class Pelilogiikka extends JPanel implements KeyListener, ActionListener{
 		    Arrays.fill(row, 0);
 	}
 
-	private boolean onkoVarattuStaattinen(int i, int j, int onkoVarattu) {
-		return pelilauta.annaStaattinenTaulukko()[i][j] == onkoVarattu;
+	private boolean onkointattuStaattinen(int i, int j, int onkointattu) {
+		return pelilauta.annaStaattinenTaulukko()[i][j] == onkointattu;
 	}
 	
-	private boolean onkoVarattuLiikkuva(int i, int j, int onkoVarattu) {
-		return pelilauta.annaLiikkuvaTaulukko()[i][j] == onkoVarattu;
+	private boolean onkointattuLiikkuva(int i, int j, int onkointattu) {
+		return pelilauta.annaLiikkuvaTaulukko()[i][j] == onkointattu;
 	}
 	
 	public void updateLiikkuvaKoordinaatti(int i, int j, int uusiArvo) {
@@ -218,7 +252,7 @@ public class Pelilogiikka extends JPanel implements KeyListener, ActionListener{
 	}
 	
 	// HYVIN KESKENERÄINEN !!!!!!!!!--------------------
-	// VAIN TESTEJÄ VARTEN
+	// VAIN TESTEJÄ intTEN
 	public void luoPalikka() {
 		Random r = new Random();
 		int arvo = r.nextInt(4)+1;
@@ -244,8 +278,10 @@ public class Pelilogiikka extends JPanel implements KeyListener, ActionListener{
 
 	public void paint(Graphics g) {
 		g.setColor(Color.black);
-		g.fillRect(1, 1, 692, 592);
+		g.fillRect(1, 1, 250, 592);
 		pelilauta.luoLauta((Graphics2D)g, currentPalikka);
+		g.fillRect(0, 500, 20, 20);
+		g.setColor(Color.RED);
 		
 	}
 	
