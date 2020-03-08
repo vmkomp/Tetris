@@ -23,7 +23,7 @@ public class Muoto {
 					uusiX = i;
 					uusiY = j+3;
 				}
-				pelilauta.alustaPalikka(uusiX, uusiY, variArvo);
+				pelilauta.alustaMuotoKoordinaatit(uusiX, uusiY, variArvo);
 			}
 		}
 	}

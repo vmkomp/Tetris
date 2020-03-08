@@ -1,7 +1,9 @@
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.util.ArrayList;
 
 public class Pelilauta {
 	private int variTaulukko[][];
@@ -26,12 +28,8 @@ public class Pelilauta {
 		}
 	}
 	
-	/**
-	 * Luo uuden pelilaudan.
-	 * @param variTaulukko 	Taulukko, joka sis‰llytt‰‰ palikoiden v‰rien arvot.
-	 */
-
-	public void luoLauta(Graphics2D g, Muoto p) {
+	
+	public void luoLauta(Graphics2D g, Muoto p, int score) {
 		for(int i=0; i< variTaulukko.length; i++) {
 			for(int j=0; j< variTaulukko[0].length; j++) {
 				
@@ -53,6 +51,11 @@ public class Pelilauta {
 				g.drawRect(j * nelionPituus, i * nelionPituus, nelionPituus, nelionPituus);
 			}
 		}
+		g.setColor(Color.RED);
+		Font font = new Font("Serif", Font.PLAIN, 32);
+		g.setFont(font);
+		g.drawString(("Pisteet: " + score), 40, 430);
+		
 	}
 	
 	public void piirraVari(Graphics2D g, int arvo, int i, int j) {
@@ -76,8 +79,26 @@ public class Pelilauta {
 		}
 	}
 	
+	
+	public Muoto alustaMuoto(int arvo, Pelilauta pelilauta) {
+		int[][] pArray = {{arvo, 0,0}, {arvo,arvo,arvo}};
+		
+		int[][] pArray2 = {{arvo, 0,0}, {arvo,arvo,arvo}};
+		int[][] pArray3 = {{arvo, 0,arvo}, {arvo,arvo,arvo}};
+		int[][] pArray4 = {{arvo, arvo,arvo}};
+		int[][] pArray5 = {{arvo, arvo,arvo}, {arvo,arvo,arvo}};
+		
+		ArrayList<int[][]> muodot = new ArrayList<int[][]>();
+		muodot.add(pArray);
+		muodot.add(pArray2);
+		muodot.add(pArray3);
+		muodot.add(pArray4);
+		muodot.add(pArray5);
+		
+		return new Muoto(muodot.get(arvo), arvo, pelilauta);
+	}
 	// Palikan grafiikoiden luonti.
-	public void alustaPalikka(int xKoordinaatti, int yKoordinaatti, int arvo) {
+	public void alustaMuotoKoordinaatit(int xKoordinaatti, int yKoordinaatti, int arvo) {
 		
 		variTaulukko[xKoordinaatti][yKoordinaatti] = arvo;
 		liikkuvaTaulukko[xKoordinaatti][yKoordinaatti] = 1;

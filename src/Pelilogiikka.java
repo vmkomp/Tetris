@@ -11,30 +11,30 @@ import java.util.Arrays;
 import java.util.Random;
 
 import javax.swing.Timer;
-import javax.swing.JButton;
 import javax.swing.JPanel;
 
 public class Pelilogiikka extends JPanel implements KeyListener, ActionListener{
 
 	private Timer timer;
-	private Muoto currentPalikka;
+	private Muoto nykyinenMuoto;
 	private Pelilauta pelilauta;
 	
 	private int delay = 150;
 	private int rivi, sarake;
 	
-	private boolean initialized;
+	public int pisteet;
 	
-	private Tietokanta t;
+	int[][] staattinenTaulukko;
 	
 	
 	public Pelilogiikka() {
 		
-		initialized = false;
+		pisteet = 0;
+		Main.score=0;
 		rivi = 20;
 		sarake = 10;
 		pelilauta = new Pelilauta(rivi, sarake);
-		t = new Tietokanta();
+		
 		
 
 		addKeyListener(this);
@@ -60,7 +60,7 @@ public class Pelilogiikka extends JPanel implements KeyListener, ActionListener{
 		// 0, 1: OIKEALLE
 		IteroituTaulukko iteroituTaulukko = new IteroituTaulukko(1, 0);
 		iteroituTaulukko.iteroiTaulukko();
-		iteroituTaulukko.iteroiRivit();
+		tuhoaRivi();
 		
 		paivitaTaulukko(iteroituTaulukko.saakoLiikkua(), iteroituTaulukko.pisteet(), liikkumistyyppi,1,0);
 	}
@@ -146,28 +146,32 @@ public class Pelilogiikka extends JPanel implements KeyListener, ActionListener{
 				}
 			}
 		}
-		
-		public void iteroiRivit() {
-			boolean isFilled;
-			int indeksi;
-			for (int row = 0; row < pelilauta.annaStaattinenTaulukko().length; row++) {
-			    isFilled = true;
-			    for (int col = 0; col < pelilauta.annaStaattinenTaulukko()[row].length; col++) {
-			        if (pelilauta.annaStaattinenTaulukko()[row][col] == 0) {
-			            isFilled = false;
-			        } else {
-			        	indeksi = row;
-			        }
-			    }
-			    if(isFilled) {
-			    	Arrays.fill(pelilauta.annaStaattinenTaulukko()[row], 0);
-			    	int[] j = {0,0,0,0,0,0,0,0,0,0};
-			        //add a new empty line sub-array to the start of the array
-			    	System.out.println("!!!!!!!!!!!!!!");
-			    }
-			    //if isFilled is still true then current row is filled
-			}
+	}
+	
+	public void luoUusiMuoto() {
+		int[][] tyhjaTaulukko = new int[rivi][sarake];
+		nollaaTaulukko(tyhjaTaulukko);
+		if(Arrays.deepEquals(tyhjaTaulukko, pelilauta.annaLiikkuvaTaulukko())) {
+			luoPalikka();
 		}
+	}
+	
+	public void tuhoaRivi() {
+
+		boolean isFilled = false;
+		for (int row = 0; row < pelilauta.annaStaattinenTaulukko().length; row++) {
+		    isFilled = true;
+		    for (int col = 0; col < pelilauta.annaStaattinenTaulukko()[row].length; col++) {
+		        if (pelilauta.annaStaattinenTaulukko()[row][col] == 0) {
+		            isFilled = false;
+		        }
+		    }
+		    if(isFilled) {
+		    	Arrays.fill(pelilauta.annaStaattinenTaulukko()[row], 0);
+		    	Main.score ++;
+		    }
+		}
+
 	}
 	
 	public int paivitaNormalisaatioLuku(int pienin, int vertailtava) {
@@ -224,7 +228,7 @@ public class Pelilogiikka extends JPanel implements KeyListener, ActionListener{
 				
 				int xKoordinaatti = pisteet.get(i).annaX();
 				int yKoordinaatti = pisteet.get(i).annaY();
-				updateStaattinenKoordinaatti(xKoordinaatti, yKoordinaatti, currentPalikka.annaVariArvo());
+				updateStaattinenKoordinaatti(xKoordinaatti, yKoordinaatti, nykyinenMuoto.annaVariArvo());
 			}
 			
 			nollaaTaulukko(pelilauta.annaLiikkuvaTaulukko());
@@ -236,7 +240,7 @@ public class Pelilogiikka extends JPanel implements KeyListener, ActionListener{
 	public void nollaaTaulukko(int[][] taulukko) {
 		
 		for (int[] row: taulukko)
-		    Arrays.fill(row, 0);
+			Arrays.fill(row, 0);
 	}
 
 	private boolean onkointattuStaattinen(int i, int j, int onkointattu) {
@@ -255,51 +259,37 @@ public class Pelilogiikka extends JPanel implements KeyListener, ActionListener{
 		pelilauta.annaStaattinenTaulukko()[i][j] = uusiArvo;
 	}
 	
-	// HYVIN KESKENERÄINEN !!!!!!!!!--------------------
-	// VAIN TESTEJÄ intTEN
+
 	public void luoPalikka() {
+		int muotojenMaara = 4;
 		Random r = new Random();
-		int arvo = r.nextInt(4)+1;
-		int arvo2 = r.nextInt(4)+1;
+		int arvo = r.nextInt(muotojenMaara)+1;
 		
-		int[][] pArray = {{arvo, 0,0}, {arvo,arvo,arvo}, {0,0,0}};
-		
-		int[][] pArray2 = {{arvo, 0,0}, {arvo,arvo,arvo}, {0,0,0}};
-		int[][] pArray3 = {{arvo, 0,arvo}, {arvo,arvo,arvo}, {0,0,0}};
-		int[][] pArray4 = {{arvo, arvo,arvo}, {0,0,0}, {0,0,0}};
-		int[][] pArray5 = {{arvo, arvo,arvo}, {arvo,arvo,arvo}, {0,0,0}};
-		ArrayList<int[][]> muodot = new ArrayList<int[][]>();
-		muodot.add(pArray);
-		muodot.add(pArray2);
-		muodot.add(pArray3);
-		muodot.add(pArray4);
-		muodot.add(pArray5);
-		System.out.println(arvo2);
-		
-		currentPalikka = new Muoto(muodot.get(arvo), arvo2, pelilauta);
+		nykyinenMuoto = pelilauta.alustaMuoto(arvo, pelilauta);
 	
 	}
 
 	public void paint(Graphics g) {
 		g.setColor(Color.black);
 		g.fillRect(1, 1, 250, 592);
-		pelilauta.luoLauta((Graphics2D)g, currentPalikka);
+		pelilauta.luoLauta((Graphics2D)g, nykyinenMuoto, Main.score);
 		g.fillRect(0, 500, 20, 20);
-		g.setColor(Color.RED);
-		
+		g.setColor(Color.RED);	
 	}
 	
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		if(!initialized) {
-			luoPalikka();
-			initialized = true;
-		}
+		
+		luoUusiMuoto();
 		timer.start();
 		repaint();
-		if(initialized) {
-			liikutaAlas();
-		}
+		staattinenTaulukko = pelilauta.annaStaattinenTaulukko();
+		liikutaAlas();
+		
+	}
+	
+	public int[][] annaStaattinenTaulukko() {
+		return staattinenTaulukko;
 	}
 
 	@Override
@@ -317,21 +307,6 @@ public class Pelilogiikka extends JPanel implements KeyListener, ActionListener{
 				break;
 			case(KeyEvent.VK_SPACE):
 				kaannaMuoto();
-			case(KeyEvent.VK_0):
-			try {
-				tallennaPeli();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-				break;
-			case(KeyEvent.VK_1):
-			try {
-				System.out.println(t.lataaPeli());
-			} catch (ClassNotFoundException | SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 		}	
 	}
 
@@ -345,20 +320,5 @@ public class Pelilogiikka extends JPanel implements KeyListener, ActionListener{
 	public void keyTyped(KeyEvent arg0) {
 		// TODO Auto-generated method stub
 		
-	}
-	
-	public String muutaMerkkijonoksi() {
-		StringBuilder sb = new StringBuilder();
-		for(int[] s1 : pelilauta.annaStaattinenTaulukko()){
-		    for(int s2 : s1){
-		        sb.append(s2);
-		    }
-		}
-		String table = sb.toString();
-		return table;
-	}
-	
-	public void tallennaPeli() throws SQLException {
-		t.tallennaPeli(muutaMerkkijonoksi());
 	}
 }

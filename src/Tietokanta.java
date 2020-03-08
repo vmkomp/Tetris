@@ -30,7 +30,8 @@ public class Tietokanta {
 
 	// Luo yhteyden tietokantaan
 
-	private void getConnection() throws ClassNotFoundException, SQLException {
+	public void getConnection() throws ClassNotFoundException, SQLException {
+		System.out.println("Yhdistetty tietokantaan");
 		Class.forName("org.sqlite.JDBC");
 		con = DriverManager.getConnection("jdbc:sqlite:TETRIS_tietokanta.db");
 		initialise();
@@ -140,19 +141,26 @@ public class Tietokanta {
 
 	// Luo taulun pelitallenteelle
 	// taulussa vain yksi paikka tallenteelle
-	public void tallennaPeli(String tallenne) throws SQLException {
-
+	public void tallennaPeli(String tallenne) throws SQLException, ClassNotFoundException {
 		PreparedStatement prep = con.prepareStatement("INSERT INTO tallenne values(?,?);");
-
 		prep.setInt(1, 1);
 		prep.setString(2, tallenne);
 		prep.execute();
 	}
+	
+	public String muutaMerkkijonoksi(int[][] staattinenTaulukko) {
+		StringBuilder sb = new StringBuilder();
+		for(int[] s1 : staattinenTaulukko){
+		    for(int s2 : s1){
+		        sb.append(s2);
+		    }
+		}
+		String table = sb.toString();
+		return table;
+	}
 
 	public String lataaPeli() throws ClassNotFoundException, SQLException {
-		if (con == null) {
-			getConnection();
-		}
+		
 
 		Statement state = con.createStatement();
 		ResultSet res = state.executeQuery("SELECT tallenne FROM tallenne");

@@ -18,14 +18,22 @@ public class Paavalikko extends JPanel implements ActionListener {
 	JButton button2;
 	JButton button3;
 	JButton button4;
-	JFrame gameWindow;
-
+	JFrame valikkoIkkuna;
+	Tietokanta tietokanta;
+	
 	App lista = new App();
 	TopLista l = new TopLista();
 
-	public Paavalikko() {
+	public Paavalikko(Tietokanta tietokanta) {
 		
-
+		this.tietokanta = tietokanta;
+		
+		valikkoIkkuna = new JFrame();
+		valikkoIkkuna.setBackground(Color.BLACK);
+		valikkoIkkuna.setBounds(10,10,1000,500);
+		valikkoIkkuna.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		valikkoIkkuna.setTitle("P‰‰valikko");
+		
 
 		// Nappula1
 		button1 = new JButton("Uusi peli");
@@ -48,11 +56,12 @@ public class Paavalikko extends JPanel implements ActionListener {
 		label = new JLabel();
 
 		panel = new JPanel();
+		
 		panel.setBorder(BorderFactory.createEmptyBorder(40, 200, 100, 200)); // Ikkunan koko
+		
 		//panel.setLayout(new GridLayout(0, 1));
 
 		// Lis‰‰ kuvan p‰‰valikkoon
-		JLabel background;
 		JLabel imgLabel = new JLabel(new ImageIcon("src/TetrisLogo.png"));
 		
 		imgLabel.setBounds(10,0,0,0);
@@ -60,22 +69,36 @@ public class Paavalikko extends JPanel implements ActionListener {
 
 		panel.add(button1);
 		panel.add(button2);
-		panel.add(button3);
+		//panel.add(button3);
+		
 		panel.add(button4);
 		panel.add(label);
 		panel.setBackground(Color.BLACK);
+		
+		valikkoIkkuna.add(panel);
+		valikkoIkkuna.setVisible(true);
+		
 
 	}
+	
+	public void piilotaValikko() {
+		valikkoIkkuna.setVisible(false);
+	}
+	
+	public void naytaValikko() {
+		valikkoIkkuna.setVisible(true);
+	}
+	
 
 	// M‰‰ritt‰‰ mit‰ napit tekee
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		count++;
-
+		
 		if (e.getSource() == button1) {
 			System.out.println("Nappi yksi");
-			Main.luoIkkuna2();
+			Main.luoPeliIkkuna(tietokanta);
+			valikkoIkkuna.setVisible(false);
 		}
 
 		if (e.getSource() == button2) {
