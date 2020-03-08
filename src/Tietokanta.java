@@ -190,7 +190,7 @@ public class Tietokanta {
 		Statement state = con.createStatement();
 		ResultSet res = state.executeQuery("SELECT tallenne, highscore, id FROM tallenne order by id desc");
 		System.out.println("Peli ladattu");
-		System.out.println(res.getString("id") + ", " + res.getString("tallenne") + ", " + res.getString("highscore"));
+		System.out.println(res.getString("id") + "," + res.getString("tallenne") + ", " + res.getString("highscore"));
 
 		StringBuilder teksti = new StringBuilder();
 
@@ -201,9 +201,6 @@ public class Tietokanta {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
-		
-		return teksti.toString();
-		
+		return teksti.toString();	
 	}
 }

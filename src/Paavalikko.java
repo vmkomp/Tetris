@@ -118,7 +118,10 @@ public class Paavalikko extends JPanel implements ActionListener {
 			
 			Main.luoLadattuPeliIkkuna(tietokanta, testiKentta, testiTulos);
 			try {
-				tietokanta.lataaPeli();
+				
+				String ladattuPeli = tietokanta.lataaPeli();
+				System.out.println("*" + tietokanta.lataaPeli() );
+				
 			} catch (ClassNotFoundException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
