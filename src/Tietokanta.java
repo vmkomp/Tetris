@@ -62,7 +62,7 @@ public class Tietokanta {
 						+ "primary key(id));");
 				// Luo tallennetaulun
 				Statement state3 = con.createStatement();
-				state3.execute("CREATE TABLE tallenne (id integer," + "tallenne varchar(200));");
+				state3.execute("CREATE TABLE tallenne (id integer AUTO_INCREMENT," + "tallenne varchar(200)," + "highscore integer(5));");
 
 				// Syöttää 10 default-tulosta
 				for (int i = 1; i < 11; i++) {
@@ -74,9 +74,10 @@ public class Tietokanta {
 					prep.execute();
 				}
 
-				PreparedStatement pre2 = con.prepareStatement("INSERT INTO tallenne values(?,?);");
+				PreparedStatement pre2 = con.prepareStatement("INSERT INTO tallenne values(?,?,?);");
 				pre2.setInt(1, 1);
 				pre2.setString(2, "default");
+				pre2.setInt(3, 0);
 				pre2.execute();
 
 			}
@@ -141,10 +142,34 @@ public class Tietokanta {
 
 	// Luo taulun pelitallenteelle
 	// taulussa vain yksi paikka tallenteelle
-	public void tallennaPeli(String tallenne) throws SQLException, ClassNotFoundException {
-		PreparedStatement prep = con.prepareStatement("INSERT INTO tallenne values(?,?);");
-		prep.setInt(1, 1);
+	public void tallennaPeli(String tallenne, int peliPisteet) throws SQLException, ClassNotFoundException {
+		
+		ArrayList<Integer> idLista = new ArrayList<Integer>();
+		Statement state = con.createStatement();
+		ResultSet rs = state.executeQuery("SELECT id FROM tallenne");
+		idLista.add(0);
+
+		try {
+			while (rs.next()) {
+
+				idLista.add(Integer.parseInt(rs.getString("id")));
+
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		int suurin = 0;
+		for (int i = 0; i < idLista.size(); i++) {
+			if (suurin < idLista.get(i)) {
+				suurin = idLista.get(i);
+			}
+		}
+		
+		PreparedStatement prep = con.prepareStatement("INSERT INTO tallenne values(?,?,?);");
+		prep.setInt(1, suurin+1);
 		prep.setString(2, tallenne);
+		prep.setInt(3, peliPisteet);
 		prep.execute();
 	}
 	
@@ -163,8 +188,9 @@ public class Tietokanta {
 		
 
 		Statement state = con.createStatement();
-		ResultSet res = state.executeQuery("SELECT tallenne FROM tallenne");
-	
+		ResultSet res = state.executeQuery("SELECT tallenne, highscore, id FROM tallenne order by id desc");
+		System.out.println("Peli ladattu");
+		System.out.println(res.getString("id") + ", " + res.getString("tallenne") + ", " + res.getString("highscore"));
 
 		StringBuilder teksti = new StringBuilder();
 

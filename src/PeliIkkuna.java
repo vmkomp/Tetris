@@ -25,9 +25,22 @@ public class PeliIkkuna implements ActionListener {
 	public PeliIkkuna(Tietokanta tietokanta) {
 		
 		this.tietokanta = tietokanta;
+		pelilogiikka = new Pelilogiikka();
+		luoGrafiikat();
+		
+	}
+	
+	public PeliIkkuna(Tietokanta tietokanta, int[][] ladattuPeli, int ladattuTulos) {
+		
+		this.tietokanta = tietokanta;
+		pelilogiikka = new Pelilogiikka(ladattuPeli, ladattuTulos);
+		luoGrafiikat();
+	}
+	
+	public void luoGrafiikat() {
 		
 		JPanel mainPanel = new JPanel();
-		pelilogiikka = new Pelilogiikka();
+		
 		
 		peliIkkuna = new JFrame();
 		peliIkkuna.getContentPane().setBackground( Color.PINK );
@@ -103,7 +116,7 @@ public class PeliIkkuna implements ActionListener {
 			String peliKentta = tietokanta.muutaMerkkijonoksi(pelilogiikka.annaStaattinenTaulukko());
 			System.out.println(peliKentta);
 			try {
-				tietokanta.tallennaPeli(peliKentta);
+				tietokanta.tallennaPeli(peliKentta, Main.score);
 			} catch (SQLException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();

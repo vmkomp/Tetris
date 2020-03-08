@@ -34,5 +34,9 @@ public abstract class Main {
 	public static void luoPeliIkkuna(Tietokanta tietokanta) {
 		 PeliIkkuna peliIkkuna = new PeliIkkuna(tietokanta);
 	}
+	
+	public static void luoLadattuPeliIkkuna(Tietokanta tietokanta, int[][] ladattuKentta, int ladattuTulos) {
+		PeliIkkuna peliIkkuna = new PeliIkkuna(tietokanta, ladattuKentta, ladattuTulos);
+	}
 
 }

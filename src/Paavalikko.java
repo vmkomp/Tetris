@@ -2,6 +2,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.net.URL;
+import java.sql.SQLException;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -111,7 +112,21 @@ public class Paavalikko extends JPanel implements ActionListener {
 
 		}
 		if (e.getSource() == button4) {
-			System.out.println("Peli ladattu");
+			int[][] testiKentta = new int[2][2];
+			int testiTulos = 3;
+			
+			
+			Main.luoLadattuPeliIkkuna(tietokanta, testiKentta, testiTulos);
+			try {
+				tietokanta.lataaPeli();
+			} catch (ClassNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			//System.out.println("Peli ladattu");
 
 		}
 	}
