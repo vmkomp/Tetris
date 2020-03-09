@@ -35,13 +35,25 @@ public class Pelilogiikka extends JPanel implements KeyListener, ActionListener{
 	public Pelilogiikka(int[][] ladattuPeli, int ladattuTulos) {
 		Main.score = ladattuTulos;
 		System.out.println(ladattuTulos);
-		asetaKonstruktori();
+		asetaKonstruktori(ladattuPeli);
 	}
 	
 	public void asetaKonstruktori() {
 		rivi = 20;
 		sarake = 10;
 		pelilauta = new Pelilauta(rivi, sarake);
+		
+		addKeyListener(this);
+		setFocusable(true);
+		setFocusTraversalKeysEnabled(false);
+		timer = new Timer(delay, this);
+		timer.start();
+	}
+	
+	public void asetaKonstruktori(int[][] ladattuPeli) {
+		rivi = 20;
+		sarake = 10;
+		pelilauta = new Pelilauta(rivi, sarake, ladattuPeli);
 		
 		addKeyListener(this);
 		setFocusable(true);

@@ -22,6 +22,8 @@ public class PeliIkkuna implements ActionListener {
 	Tietokanta tietokanta;
 	Pelilogiikka pelilogiikka;
 	
+	
+	//tämä kutsutaan jos aloitetaan uusi peli
 	public PeliIkkuna(Tietokanta tietokanta) {
 		
 		this.tietokanta = tietokanta;
@@ -30,6 +32,7 @@ public class PeliIkkuna implements ActionListener {
 		
 	}
 	
+	// Tämä kutsutaan jos ladataan peli tietokannasta
 	public PeliIkkuna(Tietokanta tietokanta, int[][] ladattuPeli, int ladattuTulos) {
 		
 		this.tietokanta = tietokanta;

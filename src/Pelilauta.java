@@ -28,6 +28,24 @@ public class Pelilauta {
 		}
 	}
 	
+	public Pelilauta(int rivi, int sarake, int[][] ladattuPeli) {
+		
+		variTaulukko = new int[rivi][sarake];
+		staattinenTaulukko = ladattuPeli;
+		liikkuvaTaulukko = new int[rivi][sarake];
+		nelionPituus = 20;
+		
+		for(int i=0; i< variTaulukko.length; i++) {
+			for(int j=0; j< variTaulukko[0].length; j++) {
+				
+				variTaulukko[i][j] = 0;
+				//staattinenTaulukko[i][j] = 0;
+				liikkuvaTaulukko[i][j]=0;
+			}
+		}
+		
+	}
+	
 	
 	public void luoLauta(Graphics2D g, Muoto p, int score) {
 		for(int i=0; i< variTaulukko.length; i++) {

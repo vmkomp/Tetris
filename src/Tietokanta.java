@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /*
  * Hoitaa yhteyden tietokantaan, alustuksen ja muokkauksen
@@ -62,9 +63,10 @@ public class Tietokanta {
 						+ "primary key(id));");
 				// Luo tallennetaulun
 				Statement state3 = con.createStatement();
-				state3.execute("CREATE TABLE tallenne (id integer AUTO_INCREMENT," + "tallenne varchar(200)," + "highscore integer(5));");
+				state3.execute("CREATE TABLE tallenne (id integer AUTO_INCREMENT," + "tallenne varchar(200),"
+						+ "highscore integer(5));");
 
-				// Syöttää 10 default-tulosta
+				// Syöttää 10 default-tulosta highscore tauluun
 				for (int i = 1; i < 11; i++) {
 
 					PreparedStatement prep = con.prepareStatement("INSERT INTO highScore values(?,?,?);");
@@ -74,6 +76,7 @@ public class Tietokanta {
 					prep.execute();
 				}
 
+				// Syöttää dataa tallennetauluun testiksi
 				PreparedStatement pre2 = con.prepareStatement("INSERT INTO tallenne values(?,?,?);");
 				pre2.setInt(1, 1);
 				pre2.setString(2, "default");
@@ -101,6 +104,7 @@ public class Tietokanta {
 		prep.execute();
 
 	}
+
 	// Lisää tulos tietokantaan
 	public void lisaaTulos(String nimi, Integer score) throws SQLException {
 
@@ -143,7 +147,7 @@ public class Tietokanta {
 	// Luo taulun pelitallenteelle
 	// taulussa vain yksi paikka tallenteelle
 	public void tallennaPeli(String tallenne, int peliPisteet) throws SQLException, ClassNotFoundException {
-		
+
 		ArrayList<Integer> idLista = new ArrayList<Integer>();
 		Statement state = con.createStatement();
 		ResultSet rs = state.executeQuery("SELECT id FROM tallenne");
@@ -165,42 +169,69 @@ public class Tietokanta {
 				suurin = idLista.get(i);
 			}
 		}
-		
+
 		PreparedStatement prep = con.prepareStatement("INSERT INTO tallenne values(?,?,?);");
-		prep.setInt(1, suurin+1);
+		prep.setInt(1, suurin + 1);
 		prep.setString(2, tallenne);
 		prep.setInt(3, peliPisteet);
 		prep.execute();
 	}
-	
+
+	// Muuttaa tallenteen matriisin merkkijonoksi tietokantaan tallentamista varten
 	public String muutaMerkkijonoksi(int[][] staattinenTaulukko) {
 		StringBuilder sb = new StringBuilder();
-		for(int[] s1 : staattinenTaulukko){
-		    for(int s2 : s1){
-		        sb.append(s2);
-		    }
+		for (int[] s1 : staattinenTaulukko) {
+			for (int s2 : s1) {
+				sb.append(s2);
+			}
 		}
 		String table = sb.toString();
 		return table;
 	}
 
-	public String lataaPeli() throws ClassNotFoundException, SQLException {
+	// Lataa tallenteen tietokannasta matriisiksi muutettuna ja pisteet
+	public ArrayList<Object> lataaPeli() throws ClassNotFoundException, SQLException, StringIndexOutOfBoundsException {
 		
-
+		ArrayList<Object> matriisiJaTulos = new ArrayList<Object>();
+		
 		Statement state = con.createStatement();
 		ResultSet res = state.executeQuery("SELECT tallenne, highscore, id FROM tallenne order by id desc");
-		System.out.println("Peli ladattu");
+		
+		System.out.println("Pelin lataaminen aloitettu");
 		System.out.println(res.getString("id") + "," + res.getString("tallenne") + ", " + res.getString("highscore"));
 
+		String tuodutPisteet = res.getString("highscore");
 		StringBuilder teksti = new StringBuilder();
 
 		try {
 			
 			teksti.append(res.getString("tallenne"));
 		
-		} catch (SQLException e) {
+		} catch (SQLException|StringIndexOutOfBoundsException e ) {
 			e.printStackTrace();
 		}
-		return teksti.toString();	
+			
+		int[][] tallenneMatriisi = new int[20][10];
+		int laskuri = 0;
+		
+		// Jos tallennetta ei löydy, annetaan tyhjä matriisi ja tulos
+		try {
+			for (int rivi=0;rivi<20; rivi++) {
+				for (int sarake=0; sarake<10; sarake++) {
+					tallenneMatriisi[rivi][sarake] = Character.getNumericValue(teksti.charAt(laskuri));
+					laskuri++;
+				}
+			}
+		} catch (StringIndexOutOfBoundsException e) {
+			System.out.println("Virhe pelin lataamisessa. Tallennetta ei ole olemassa!");
+			tallenneMatriisi = new int[20][10];
+			tuodutPisteet = "0";
+			//e.printStackTrace();
+		}
+		
+		matriisiJaTulos.add(tallenneMatriisi);
+		matriisiJaTulos.add(Integer.parseInt(tuodutPisteet));
+			
+		return matriisiJaTulos;
 	}
 }
