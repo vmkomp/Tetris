@@ -6,6 +6,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="C:/Users/Kone/Documents/Repositoriot/Tetris/src/sqlite-jdbc-3.30.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/jakki/git/Tetris/bin/sqlite-jdbc-3.30.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
