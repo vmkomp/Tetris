@@ -70,9 +70,9 @@ public class Paavalikko extends JPanel implements ActionListener {
 
 		panel.add(button1);
 		panel.add(button2);
-		panel.add(button3);
-
+		//panel.add(button3);
 		panel.add(button4);
+		
 		panel.add(label);
 		panel.setBackground(Color.BLACK);
 
@@ -105,15 +105,18 @@ public class Paavalikko extends JPanel implements ActionListener {
 
 		}
 		
-		// TODO: Avaa tulosikkuna siinä kohtaa kun peli loppuu ja poista tämä
+		/* TODO: Avaa tulosikkuna siinä kohtaa kun peli loppuu ja poista tämä
+		 * 
 		if (e.getSource() == button3) {
 			System.out.println("Tallenna tulos");
 			tulosikkuna.avaaTulosIkkuna();
 		}
+		*/
 		
-		
+		// Lataa peli -nappi
 		if (e.getSource() == button4) {
 
+			valikkoIkkuna.dispose();
 			// Hakee ladatun pelin tiedot ArrayListina
 			ArrayList<Object> o = new ArrayList<Object>();
 

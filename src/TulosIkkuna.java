@@ -28,7 +28,7 @@ public class TulosIkkuna extends JFrame {
 		setTitle("Tallenna tulos");
 		setVisible(true);
 		setSize(400, 200);
-		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 		jp.add(tekstikentta);
 
@@ -55,7 +55,7 @@ public class TulosIkkuna extends JFrame {
 					System.out.println("Annoit tekstin " + input);
 
 					try {
-						tietokanta.lisaaTulos(input, 123);
+						tietokanta.lisaaTulos(input, Main.score);
 					} catch (SQLException e1) {
 						System.out.println("Virhe tallennettaessa tulosta tietokantaan");
 						e1.printStackTrace();
