@@ -280,7 +280,7 @@ public class Pelilogiikka extends JPanel implements KeyListener, ActionListener{
 	public void luoPalikka() {
 		int muotojenMaara = 4;
 		Random r = new Random();
-		int arvo = r.nextInt(muotojenMaara)+1;
+		int arvo = r.nextInt(muotojenMaara);
 		
 		nykyinenMuoto = pelilauta.alustaMuoto(arvo, pelilauta);
 	

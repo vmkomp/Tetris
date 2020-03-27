@@ -97,28 +97,37 @@ public class Pelilauta {
 		}
 	}
 	
-	
+
 	public Muoto alustaMuoto(int arvo, Pelilauta pelilauta) {
-		int[][] pArray = {{arvo, 0,0}, {arvo,arvo,arvo}};
 		
-		int[][] pArray2 = {{arvo, 0,0}, {arvo,arvo,arvo}};
-		int[][] pArray3 = {{arvo, 0,arvo}, {arvo,arvo,arvo}};
-		int[][] pArray4 = {{arvo, arvo,arvo}};
-		int[][] pArray5 = {{arvo, arvo,arvo}, {arvo,arvo,arvo}};
-		
-		ArrayList<int[][]> muodot = new ArrayList<int[][]>();
-		muodot.add(pArray);
-		muodot.add(pArray2);
-		muodot.add(pArray3);
-		muodot.add(pArray4);
-		muodot.add(pArray5);
-		
-		return new Muoto(muodot.get(arvo), arvo, pelilauta);
+		// S tarkoittaa suorakulmiota. Muut palikat nimetty ulkoasua vastaavaksi kirjaimeksi.
+		switch (arvo) {
+			case 0:
+				S suorakulmio = new S();
+				suorakulmio.sovitaPeliKenttaan(pelilauta);
+				return (Muoto)suorakulmio;
+			case 1:
+				L l = new L();
+				l.sovitaPeliKenttaan(pelilauta);
+				return (Muoto)l;
+			case 2:
+				M m = new M();
+				m.sovitaPeliKenttaan(pelilauta);
+				return (Muoto)m;
+			case 3:
+				I i = new I();
+				i.sovitaPeliKenttaan(pelilauta);
+				return (Muoto)i;
+				
+			default:
+				L defaultShape = new L();
+				defaultShape.sovitaPeliKenttaan(pelilauta);
+				return (Muoto)defaultShape;
+		}
 	}
 	// Palikan grafiikoiden luonti.
-	public void alustaMuotoKoordinaatit(int xKoordinaatti, int yKoordinaatti, int arvo) {
-		
-		variTaulukko[xKoordinaatti][yKoordinaatti] = arvo;
+
+	public void asetaLiikkuvaTaulukko(int xKoordinaatti, int yKoordinaatti, int arvo) {
 		liikkuvaTaulukko[xKoordinaatti][yKoordinaatti] = 1;
 	}
 	
